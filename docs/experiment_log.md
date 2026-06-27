@@ -129,14 +129,46 @@ TF 노트북의 BatchNorm momentum을 `0.9`로 수정 (PyTorch `momentum=0.1`과
 
 ---
 
+## β-VAE 실험 결과
+
+실험 범위: β = 0.5, 1.0, 2.0, 4.0
+
+**최종 결정: β=1.0**
+
+body 데이터셋은 동질성이 높은 인체 형태 위주라 β를 높일수록 KL이 잠재 공간을 과도하게 압축해 디테일이 뭉개짐. β=1.0(표준 VAE)이 시각적으로 가장 좋은 복원 품질을 보임.
+
+---
+
+## Latent Space Arithmetic (06, 06-1)
+
+VAE 잠재 공간에서 벡터 연산으로 이미지 속성을 제어하는 기법.
+
+### 구현 내용
+
+| 섹션 | 기능 |
+|------|------|
+| 4. 기본 산술 | `z_A - z_B + z_C` 연산 및 시각화 |
+| 5. 방향 벡터 추출 | 파일명 키워드로 두 그룹을 나눠 `mean(z_A) - mean(z_B)` 방향 추출 |
+| 6. 속성 이식 | `z_대상 + α × 방향벡터` (α = -2 ~ +2, 실행마다 랜덤 이미지) |
+| 7. 다중 방향 합성 | 두 방향벡터 동시 적용 (실행마다 랜덤 이미지) |
+
+### 사용 가능한 키워드 (body 데이터셋)
+
+| 종류 | 키워드 |
+|------|--------|
+| 캐릭터 타입 | `male`, `female`, `teen`, `child`, `pregnant`, `muscular` |
+| 동작 | `walk`, `run`, `jump`, `slash`, `shoot`, `thrust`, `idle`, `sit`, `spellcast`, `climb`, `hurt`, `emote` |
+
+---
+
 ## 현재 구현 현황
 
 | 기법 | 상태 |
 |------|------|
 | 표준 VAE | 완료 (TF + PyTorch) |
 | Latent space interpolation | 완료 (양쪽 섹션 10) |
-| β-VAE | 실험 노트북(05) 완료, 학습 대기 |
+| β-VAE | 완료 — β=1.0 최종 선택 |
+| Latent space arithmetic | 완료 (TF: 06 / PyTorch: 06-1) |
 | CVAE | 미구현 |
-| Latent space arithmetic | 미구현 |
 | Latent space 시각화 (t-SNE/PCA) | 미구현 |
 | Perceptual loss | 미구현 |

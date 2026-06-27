@@ -25,3 +25,5 @@ env/
 *.h5
 *.pt
 *.weights.h5
+.claude
+PROGRESS.md
