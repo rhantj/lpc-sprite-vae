@@ -332,6 +332,67 @@ PyTorch 09-1은 `to_vgg_scaled` 사용. TF와 동일한 스케일로 perceptual 
 
 ---
 
+## 키워드 서브폴더 분리 (03-2)
+
+`processed/` 하위 카테고리 폴더 내 파일을 파일명 첫 토큰 기준으로 서브폴더로 재분류.  
+`body/`는 기존 구조 유지.
+
+### 배경
+
+CVAE를 카테고리 전체로 확장할 때 같은 `arms/` 폴더 안에 `armour`, `bracers`, `hands`, `wrists` 등이 혼재되면 레이블 노이즈 발생. 키워드별 서브폴더로 분리해 fine-grained 조건 부여 가능.
+
+### 파일명 구조
+
+```
+{keyword}_{subtype}_{gender}_{action}_{color}_{variant}_{frame}.png
+```
+
+body 예외: `bodies_{type}_{action}_{variant}_{frame}.png`  
+hair 예외: gender 없이 `adult`/`child` 등 연령 타입 사용
+
+### 분리 결과
+
+| 카테고리 | 키워드 수 | 비고 |
+|---------|---------|------|
+| arms | 4 | armour, bracers, hands, wrists |
+| feet | 8 | boots, shoes, sandals, slippers, socks, armour, hoofs, accessory |
+| hair | 40+ | afro, long, braid, ponytail 등 다양 |
+| hat | 9 | cloth, formal, helmet, headband, magic, pirate, visor 등 |
+| legs | 12 | pants, skirts, armour, hose, leggings, shorts 등 |
+| torso | 7 | clothes, armour, chainmail, jacket, bandage, aprons, waist |
+| tail / wings / wound / wheelchair | 1 | 단일 키워드, 분리 불필요 |
+
+---
+
+## Streamlit 앱 방향 결정
+
+### 방법 1: 레이어 합성 (현재 채택)
+
+LPC 스프라이트가 동일한 64×64 RGBA로 설계되어 PIL alpha_composite로 레이어를 쌓을 수 있음.
+
+```
+body  → hair → torso → legs → feet  (레이어 순서)
+```
+
+- 추가 학습 없이 즉시 구현 가능
+- 키워드로 각 레이어 폴더를 선택 후 action + character type으로 파일 필터링
+
+### 방법 2: CVAE 생성 (노트북 10, 추후 진행)
+
+카테고리별 CVAE를 PyTorch로 학습해 새로운 스프라이트를 생성한 뒤 합성.  
+학습 대상 카테고리: torso, legs, feet, hair (body는 기존 모델 사용).  
+레이블: `(category, keyword)` 조합 (예: `torso_clothes`, `feet_boots`)
+
+### 공통 파일 매칭 구조
+
+| 카테고리 | 필터 기준 |
+|---------|---------|
+| body | `bodies_{type}_{action}_*.png` |
+| torso/legs/feet | `_{action}_` + `_{type}_` 포함 |
+| hair | `_{action}_` + `_adult_` (gender 무관) |
+
+---
+
 ## 현재 구현 현황
 
 | 기법 | 상태 |
@@ -344,4 +405,6 @@ PyTorch 09-1은 `to_vgg_scaled` 사용. TF와 동일한 스케일로 perceptual 
 | Latent space 시각화 (CVAE) | 완료 (07-1) — VAE vs CVAE std 비교 |
 | CVAE | 완료 (TF: 08 β=1.0 / PyTorch: 08-1 β=1.5) |
 | CVAE + Perceptual Loss | 완료 (09 TF / 09-1 PT) — **PT 최종 선택** |
-| Streamlit 데모 앱 | 예정 |
+| 키워드 서브폴더 분리 | 완료 (03-2) |
+| Streamlit 앱 (레이어 합성) | 예정 (방법 1) |
+| CVAE 추가 학습 (카테고리 확장) | 예정 (노트북 10, 방법 2) |

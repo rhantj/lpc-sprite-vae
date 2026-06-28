@@ -10,6 +10,7 @@ LPC(Liberated Pixel Cup) 64×64 RGBA 스프라이트 프레임을 학습하는 V
 | 02 | `02_preprocessing.ipynb` | 전처리 및 64×64 PNG 변환 |
 | 03 | `03_data_restructure.ipynb` | 카테고리 재분류 (wings/tail 분리, zombie/skeleton 삭제 등) |
 | 03-1 | `03-1_augment_body.ipynb` | body 데이터 좌우반전 증강 (2,272 → 4,544장) |
+| 03-2 | `03-2_keyword_split.ipynb` | 카테고리 내 파일을 첫 키워드 서브폴더로 분리 (body 제외) |
 | 04 | `04_vae_model_tf.ipynb` | VAE 학습 — TensorFlow |
 | 04-1 | `04-1_vae_model_pytorch.ipynb` | VAE 학습 — PyTorch |
 | 05 | `05_beta_vae_experiment.ipynb` | β-VAE 실험 (β=0.5/1.0/2.0/4.0 비교, β=1.0 최종 선택) |
@@ -22,7 +23,7 @@ LPC(Liberated Pixel Cup) 64×64 RGBA 스프라이트 프레임을 학습하는 V
 | 09 | `09_cvae_perceptual_tf.ipynb` | CVAE + Perceptual Loss 파인튜닝 — TensorFlow |
 | 09-1 | `09-1_cvae_perceptual_pytorch.ipynb` | CVAE + Perceptual Loss 파인튜닝 — PyTorch **★ 최종 모델** |
 
-> 03 → 03-1 은 데이터 준비 단계이므로 04 실행 전 반드시 완료해야 합니다.  
+> 데이터 준비: 03 → 03-1 → 03-2 순서로 실행 후 04 진행  
 > 09-1 PyTorch 버전이 조건부 생성 품질이 가장 우수해 Streamlit 앱에 사용합니다.
 
 ## 데이터셋 구조
@@ -30,13 +31,18 @@ LPC(Liberated Pixel Cup) 64×64 RGBA 스프라이트 프레임을 학습하는 V
 ```
 dataset/
 └── processed/          # 카테고리별 64×64 RGBA PNG
-    ├── body/           # 4,544 (원본 2,272 + 좌우반전 2,272)
-    ├── wings/          # 100,264
-    ├── tail/           # 93,593
-    ├── wound/          # 2,528
-    ├── wheelchair/     # 70
-    ├── prosthesis/     # 532
-    └── ...             # 기타 카테고리 (총 26개)
+    ├── body/           # 4,544 (flat, 좌우반전 포함)
+    ├── torso/
+    │   ├── clothes/    # 가장 큰 서브셋
+    │   ├── armour/
+    │   └── ...         # chainmail, jacket, bandage, aprons, waist
+    ├── legs/           # pants, skirts, armour, hose, leggings ...
+    ├── feet/           # boots, shoes, sandals, socks ...
+    ├── hair/           # long, afro, braid, ponytail ... (40+ 종)
+    ├── hat/            # cloth, helmet, formal, headband ...
+    ├── wings/          # 100,264 (단일 키워드, flat)
+    ├── tail/           # 93,593 (단일 키워드, flat)
+    └── ...             # 총 26개 카테고리
 ```
 
 총 프레임 수: 약 2,848,904장
