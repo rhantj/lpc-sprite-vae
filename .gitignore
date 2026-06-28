@@ -5,6 +5,8 @@ dataset/
 checkpoints_tf/
 checkpoints_pt/
 checkpoints_beta/
+checkpoints_cvae_tf/
+checkpoints_cvae_pt/
 
 # Python
 __pycache__/
