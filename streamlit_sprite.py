@@ -159,8 +159,7 @@ with st.sidebar:
     st.divider()
     generate_btn = st.button("Generate", use_container_width=True)
 
-# 초기 실행 또는 Generate 클릭 시 생성
-if generate_btn or "sprites" not in st.session_state:
+if generate_btn:
     body_idx  = BODY_ACTIONS.index(body_action)
     hair_idx  = label_map[f"hair_{hair_kw}"]
     torso_idx = label_map[f"torso_{torso_kw}"]
@@ -175,6 +174,10 @@ if generate_btn or "sprites" not in st.session_state:
         "feet":  generate_layer(layer_model, feet_idx,  layer_cfg["num_classes"], layer_cfg["latent_dim"]),
     }
     st.session_state["sprites"] = sprites
+
+if "sprites" not in st.session_state:
+    st.info("사이드바에서 옵션을 선택하고 Generate를 눌러주세요.")
+    st.stop()
 
 sprites = st.session_state["sprites"]
 
