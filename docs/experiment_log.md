@@ -377,19 +377,68 @@ body  → hair → torso → legs → feet  (레이어 순서)
 - 추가 학습 없이 즉시 구현 가능
 - 키워드로 각 레이어 폴더를 선택 후 action + character type으로 파일 필터링
 
-### 방법 2: CVAE 생성 (노트북 10, 추후 진행)
+### 방법 2: CVAE 생성 (노트북 10, 채택)
 
-카테고리별 CVAE를 PyTorch로 학습해 새로운 스프라이트를 생성한 뒤 합성.  
-학습 대상 카테고리: torso, legs, feet, hair (body는 기존 모델 사용).  
-레이블: `(category, keyword)` 조합 (예: `torso_clothes`, `feet_boots`)
+torso/legs/feet/hair 4개 카테고리를 하나의 CVAE 모델로 학습.  
+레이블: `{category}_{keyword}` 조합 86 클래스 (예: `torso_clothes`, `feet_boots`)  
+body는 기존 `checkpoints_cvae_pl_pt/` 모델 사용.
 
-### 공통 파일 매칭 구조
+---
 
-| 카테고리 | 필터 기준 |
-|---------|---------|
-| body | `bodies_{type}_{action}_*.png` |
-| torso/legs/feet | `_{action}_` + `_{type}_` 포함 |
-| hair | `_{action}_` + `_adult_` (gender 무관) |
+## CVAE 레이어 학습 (10)
+
+### 설정
+
+| 항목 | 값 |
+|------|-----|
+| 대상 카테고리 | torso, legs, feet, hair |
+| 총 클래스 | 86 |
+| 총 파일 | ~906,787 |
+| latent_dim | 128 |
+| base_channels | 32 |
+| β | 1.5 |
+| epochs | 100 |
+| batch_size | 128 |
+| lr | 1e-3 (CosineAnnealing) |
+| 체크포인트 | `checkpoints_cvae_layer_pt/` (git 추적) |
+
+### 레이블 구조
+
+```
+torso: 7 클래스 (aprons, armour, bandage, chainmail, clothes, jacket, waist)
+legs:  12 클래스 (armour, cuffed, formal, fur, hose, leggings, leggings2, pantaloons, pants, pants2, shorts, skirts)
+feet:  8 클래스 (accessory, armour, boots, hoofs, sandals, shoes, slippers, socks)
+hair:  59 클래스 (afro, balding, bangs, bob, braid, curly, long, ponytail ...)
+```
+
+### 클래스 내 다양성
+
+각 키워드 서브폴더 안에 색상·서브타입이 다른 파일이 혼재하지만, z 샘플링으로 within-class 다양성을 표현. Streamlit에서 동일 키워드 + 다른 z → 다른 색상/스타일 생성.
+
+---
+
+## Streamlit 앱 (`streamlit_sprite.py`)
+
+### 구조
+
+| 선택 | 레이블 | 모델 |
+|------|-------|------|
+| 몸 (동작) | action (walk/idle/run 등 10종) | `checkpoints_cvae_pl_pt/` |
+| 헤어 | `hair_{keyword}` | `checkpoints_cvae_layer_pt/` |
+| 상의 | `torso_{keyword}` | `checkpoints_cvae_layer_pt/` |
+| 하의 | `legs_{keyword}` | `checkpoints_cvae_layer_pt/` |
+| 발 | `feet_{keyword}` | `checkpoints_cvae_layer_pt/` |
+
+### 생성 흐름
+
+1. 각 레이어별로 CVAE decoder에 z ~ N(0,I) + label → 64×64 RGBA 생성
+2. 레이어 순서대로 PIL alpha_composite 합성: body → legs → feet → torso → hair
+3. 256×256으로 nearest neighbor 업스케일해서 표시
+
+### 특이사항
+
+- 원본 스프라이트 미사용, 순수 CVAE 생성
+- Generate 버튼 클릭마다 새로운 z 샘플링 → 같은 키워드라도 다른 결과
 
 ---
 
@@ -406,5 +455,5 @@ body  → hair → torso → legs → feet  (레이어 순서)
 | CVAE | 완료 (TF: 08 β=1.0 / PyTorch: 08-1 β=1.5) |
 | CVAE + Perceptual Loss | 완료 (09 TF / 09-1 PT) — **PT 최종 선택** |
 | 키워드 서브폴더 분리 | 완료 (03-2) |
-| Streamlit 앱 (레이어 합성) | 예정 (방법 1) |
-| CVAE 추가 학습 (카테고리 확장) | 예정 (노트북 10, 방법 2) |
+| CVAE 레이어 학습 | 완료 (10) — 86 클래스, `checkpoints_cvae_layer_pt/` |
+| Streamlit 앱 | 완료 (`streamlit_sprite.py`) |

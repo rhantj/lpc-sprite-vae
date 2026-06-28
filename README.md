@@ -21,10 +21,23 @@ LPC(Liberated Pixel Cup) 64×64 RGBA 스프라이트 프레임을 학습하는 V
 | 08 | `08_cvae_tf.ipynb` | CVAE 학습 — TensorFlow (β=1.0) |
 | 08-1 | `08-1_cvae_pytorch.ipynb` | CVAE 학습 — PyTorch (β=1.5) |
 | 09 | `09_cvae_perceptual_tf.ipynb` | CVAE + Perceptual Loss 파인튜닝 — TensorFlow |
-| 09-1 | `09-1_cvae_perceptual_pytorch.ipynb` | CVAE + Perceptual Loss 파인튜닝 — PyTorch **★ 최종 모델** |
+| 09-1 | `09-1_cvae_perceptual_pytorch.ipynb` | CVAE + Perceptual Loss 파인튜닝 — PyTorch **★ body 모델** |
+| 10 | `10_cvae_layer_pytorch.ipynb` | 레이어 CVAE 학습 — torso/legs/feet/hair (86 클래스) **★ 레이어 모델** |
 
-> 데이터 준비: 03 → 03-1 → 03-2 순서로 실행 후 04 진행  
-> 09-1 PyTorch 버전이 조건부 생성 품질이 가장 우수해 Streamlit 앱에 사용합니다.
+> 데이터 준비: 03 → 03-1 → 03-2 순서로 실행 후 04 진행
+
+## Streamlit 앱
+
+```bash
+streamlit run streamlit_sprite.py
+```
+
+| 선택 항목 | 모델 | 체크포인트 |
+|----------|------|-----------|
+| 몸 (동작) | CVAE + PL | `checkpoints_cvae_pl_pt/` |
+| 헤어 / 상의 / 하의 / 발 | CVAE Layer | `checkpoints_cvae_layer_pt/` |
+
+키워드를 조합해 5개 레이어를 각각 CVAE로 생성한 뒤 alpha composite로 합성.
 
 ## 데이터셋 구조
 
@@ -50,16 +63,17 @@ dataset/
 ## 체크포인트 구조
 
 ```
-checkpoints_tf/           # TF VAE (β=1.0)
-checkpoints_pt/           # PyTorch VAE (β=1.0)
-checkpoints_beta/         # β-VAE 실험 결과
-checkpoints_cvae_tf/      # TF CVAE (β=1.0)
-checkpoints_cvae_pt/      # PyTorch CVAE (β=1.5)
-checkpoints_cvae_pl_tf/   # TF CVAE + Perceptual Loss
-checkpoints_cvae_pl_pt/   # PyTorch CVAE + Perceptual Loss ★ Streamlit 사용
+checkpoints_tf/             # TF VAE (β=1.0)
+checkpoints_pt/             # PyTorch VAE (β=1.0)
+checkpoints_beta/           # β-VAE 실험 결과
+checkpoints_cvae_tf/        # TF CVAE (β=1.0)
+checkpoints_cvae_pt/        # PyTorch CVAE (β=1.5)
+checkpoints_cvae_pl_tf/     # TF CVAE + Perceptual Loss
+checkpoints_cvae_pl_pt/     # PyTorch CVAE + Perceptual Loss ★ body 생성
+checkpoints_cvae_layer_pt/  # PyTorch CVAE Layer (86 클래스) ★ 레이어 생성 (git 추적)
 ```
 
-> 모든 체크포인트는 `.gitignore`로 제외됩니다. 로컬에서 각 노트북을 실행해 생성하세요.
+> `checkpoints_cvae_layer_pt/`만 git에 포함. 나머지는 로컬에서 각 노트북을 실행해 생성하세요.
 
 ## 환경
 
