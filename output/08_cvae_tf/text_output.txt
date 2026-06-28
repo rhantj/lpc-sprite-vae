@@ -18,20 +18,18 @@ Label distribution:
 
 [cell 6]
 Train: 4089  Val: 455
-
-[cell 6]
 Train batches: 32  Val batches: 4
 
 [cell 8]
-Model: "cvae"
+Model: "cvae_3"
 
 [cell 8]
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
 ┃ Layer (type)                    ┃ Output Shape           ┃       Param # ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
-│ cvae_encoder (CVAEEncoder)      │ ?                      │     1,743,968 │
+│ cvae_encoder_3 (CVAEEncoder)    │ ?                      │     1,743,968 │
 ├─────────────────────────────────┼────────────────────────┼───────────────┤
-│ cvae_decoder (CVAEDecoder)      │ ?                      │     1,260,644 │
+│ cvae_decoder_3 (CVAEDecoder)    │ ?                      │     1,260,644 │
 └─────────────────────────────────┴────────────────────────┴───────────────┘
 
 [cell 8]
@@ -47,306 +45,306 @@ Model: "cvae"
 Optimizer and loss functions ready.
 
 [cell 12]
-Epoch   1/100  loss=2184.87  recon=2143.83  kl=41.04  val_loss=761.36  lr=0.001000
+Epoch   1/100  loss=2118.35  recon=2077.41  kl=40.94  val_loss=860.65  lr=0.001000
 
 [cell 12]
-Epoch   2/100  loss=525.49  recon=502.19  kl=23.29  val_loss=398.64  lr=0.001000
+Epoch   2/100  loss=664.14  recon=575.14  kl=89.00  val_loss=489.41  lr=0.001000
 
 [cell 12]
-Epoch   3/100  loss=346.66  recon=321.32  kl=25.35  val_loss=300.87  lr=0.000999
+Epoch   3/100  loss=431.61  recon=419.67  kl=11.94  val_loss=394.50  lr=0.000999
 
 [cell 12]
-Epoch   4/100  loss=276.54  recon=252.92  kl=23.63  val_loss=255.47  lr=0.000998
+Epoch   4/100  loss=358.98  recon=350.15  kl=8.83  val_loss=315.43  lr=0.000998
 
 [cell 12]
-Epoch   5/100  loss=239.07  recon=214.11  kl=24.95  val_loss=227.05  lr=0.000996
+Epoch   5/100  loss=291.22  recon=281.07  kl=10.15  val_loss=263.44  lr=0.000996
 
 [cell 12]
-Epoch   6/100  loss=212.69  recon=185.88  kl=26.80  val_loss=209.17  lr=0.000994
+Epoch   6/100  loss=245.56  recon=233.43  kl=12.13  val_loss=240.01  lr=0.000994
 
 [cell 12]
-Epoch   7/100  loss=191.23  recon=163.81  kl=27.42  val_loss=183.01  lr=0.000991
+Epoch   7/100  loss=212.17  recon=200.18  kl=11.99  val_loss=203.74  lr=0.000991
 
 [cell 12]
-Epoch   8/100  loss=173.90  recon=146.41  kl=27.49  val_loss=168.33  lr=0.000988
+Epoch   8/100  loss=189.82  recon=176.88  kl=12.95  val_loss=181.55  lr=0.000988
 
 [cell 12]
-Epoch   9/100  loss=165.07  recon=136.55  kl=28.53  val_loss=163.38  lr=0.000984
+Epoch   9/100  loss=171.74  recon=158.03  kl=13.71  val_loss=165.42  lr=0.000984
 
 [cell 12]
-Epoch  10/100  loss=153.41  recon=125.42  kl=27.99  val_loss=148.66  lr=0.000980
+Epoch  10/100  loss=152.10  recon=139.54  kl=12.56  val_loss=146.92  lr=0.000980
 
 [cell 12]
-Epoch  11/100  loss=143.94  recon=116.14  kl=27.80  val_loss=142.11  lr=0.000976
+Epoch  11/100  loss=138.84  recon=126.68  kl=12.16  val_loss=132.55  lr=0.000976
 
 [cell 12]
-Epoch  12/100  loss=138.19  recon=110.05  kl=28.14  val_loss=136.75  lr=0.000971
+Epoch  12/100  loss=128.01  recon=116.27  kl=11.74  val_loss=124.89  lr=0.000971
 
 [cell 12]
-Epoch  13/100  loss=131.82  recon=103.81  kl=28.01  val_loss=128.58  lr=0.000965
+Epoch  13/100  loss=120.33  recon=108.63  kl=11.71  val_loss=119.32  lr=0.000965
 
 [cell 12]
-Epoch  14/100  loss=125.98  recon=98.29  kl=27.68  val_loss=125.76  lr=0.000959
+Epoch  14/100  loss=112.02  recon=100.50  kl=11.52  val_loss=110.22  lr=0.000959
 
 [cell 12]
-Epoch  15/100  loss=121.58  recon=93.92  kl=27.65  val_loss=121.01  lr=0.000953
+Epoch  15/100  loss=105.42  recon=94.51  kl=10.91  val_loss=102.91  lr=0.000953
 
 [cell 12]
-Epoch  16/100  loss=117.93  recon=90.38  kl=27.54  val_loss=117.15  lr=0.000946
+Epoch  16/100  loss=100.22  recon=89.75  kl=10.47  val_loss=99.13  lr=0.000946
 
 [cell 12]
-Epoch  17/100  loss=114.70  recon=87.50  kl=27.20  val_loss=116.67  lr=0.000939
+Epoch  17/100  loss=95.42  recon=85.08  kl=10.34  val_loss=95.80  lr=0.000939
 
 [cell 12]
-Epoch  18/100  loss=113.53  recon=85.55  kl=27.98  val_loss=113.92  lr=0.000931
+Epoch  18/100  loss=92.65  recon=82.33  kl=10.32  val_loss=92.92  lr=0.000931
 
 [cell 12]
-Epoch  19/100  loss=108.77  recon=81.73  kl=27.04  val_loss=109.29  lr=0.000923
+Epoch  19/100  loss=88.05  recon=77.97  kl=10.08  val_loss=93.71  lr=0.000923
 
 [cell 12]
-Epoch  20/100  loss=106.13  recon=79.25  kl=26.88  val_loss=105.68  lr=0.000914
+Epoch  20/100  loss=88.44  recon=77.72  kl=10.71  val_loss=90.08  lr=0.000914
 
 [cell 12]
-Epoch  21/100  loss=103.43  recon=76.88  kl=26.55  val_loss=104.29  lr=0.000905
+Epoch  21/100  loss=83.04  recon=73.09  kl=9.95  val_loss=81.17  lr=0.000905
 
 [cell 12]
-Epoch  22/100  loss=101.04  recon=74.36  kl=26.68  val_loss=102.33  lr=0.000896
+Epoch  22/100  loss=79.66  recon=70.21  kl=9.45  val_loss=79.21  lr=0.000896
 
 [cell 12]
-Epoch  23/100  loss=98.89  recon=72.66  kl=26.23  val_loss=101.16  lr=0.000886
+Epoch  23/100  loss=77.27  recon=68.33  kl=8.94  val_loss=80.45  lr=0.000886
 
 [cell 12]
-Epoch  24/100  loss=97.55  recon=71.36  kl=26.19  val_loss=98.18  lr=0.000876
+Epoch  24/100  loss=75.42  recon=66.12  kl=9.30  val_loss=79.50  lr=0.000876
 
 [cell 12]
-Epoch  25/100  loss=95.02  recon=69.10  kl=25.92  val_loss=97.35  lr=0.000866
+Epoch  25/100  loss=72.52  recon=63.71  kl=8.81  val_loss=74.01  lr=0.000866
 
 [cell 12]
-Epoch  26/100  loss=93.98  recon=67.84  kl=26.14  val_loss=94.84  lr=0.000855
+Epoch  26/100  loss=71.85  recon=62.93  kl=8.92  val_loss=73.51  lr=0.000855
 
 [cell 12]
-Epoch  27/100  loss=91.73  recon=66.03  kl=25.70  val_loss=94.08  lr=0.000844
+Epoch  27/100  loss=68.83  recon=60.36  kl=8.47  val_loss=71.31  lr=0.000844
 
 [cell 12]
-Epoch  28/100  loss=90.25  recon=64.58  kl=25.67  val_loss=93.47  lr=0.000832
+Epoch  28/100  loss=68.47  recon=59.93  kl=8.55  val_loss=73.46  lr=0.000832
 
 [cell 12]
-Epoch  29/100  loss=88.78  recon=63.21  kl=25.57  val_loss=90.41  lr=0.000821
+Epoch  29/100  loss=66.44  recon=58.00  kl=8.44  val_loss=68.92  lr=0.000821
 
 [cell 12]
-Epoch  30/100  loss=87.31  recon=61.94  kl=25.37  val_loss=89.10  lr=0.000808
+Epoch  30/100  loss=64.68  recon=56.58  kl=8.10  val_loss=67.11  lr=0.000808
 
 [cell 12]
-Epoch  31/100  loss=86.15  recon=60.85  kl=25.30  val_loss=87.52  lr=0.000796
+Epoch  31/100  loss=63.64  recon=55.60  kl=8.03  val_loss=64.40  lr=0.000796
 
 [cell 12]
-Epoch  32/100  loss=85.21  recon=59.86  kl=25.34  val_loss=87.75  lr=0.000783
+Epoch  32/100  loss=62.09  recon=54.15  kl=7.94  val_loss=62.47  lr=0.000783
 
 [cell 12]
-Epoch  33/100  loss=83.55  recon=58.63  kl=24.92  val_loss=86.43  lr=0.000770
+Epoch  33/100  loss=60.48  recon=52.77  kl=7.70  val_loss=62.64  lr=0.000770
 
 [cell 12]
-Epoch  34/100  loss=83.36  recon=58.45  kl=24.91  val_loss=85.71  lr=0.000757
+Epoch  34/100  loss=58.61  recon=51.19  kl=7.42  val_loss=61.40  lr=0.000757
 
 [cell 12]
-Epoch  35/100  loss=81.60  recon=56.81  kl=24.79  val_loss=83.94  lr=0.000743
+Epoch  35/100  loss=58.66  recon=51.12  kl=7.55  val_loss=62.40  lr=0.000743
 
 [cell 12]
-Epoch  36/100  loss=80.46  recon=55.76  kl=24.70  val_loss=82.57  lr=0.000730
+Epoch  36/100  loss=56.40  recon=49.12  kl=7.28  val_loss=57.47  lr=0.000730
 
 [cell 12]
-Epoch  37/100  loss=79.15  recon=54.67  kl=24.49  val_loss=82.16  lr=0.000716
+Epoch  37/100  loss=55.31  recon=48.33  kl=6.98  val_loss=58.51  lr=0.000716
 
 [cell 12]
-Epoch  38/100  loss=77.78  recon=53.43  kl=24.35  val_loss=80.62  lr=0.000702
+Epoch  38/100  loss=54.73  recon=47.79  kl=6.94  val_loss=58.46  lr=0.000702
 
 [cell 12]
-Epoch  39/100  loss=77.15  recon=53.00  kl=24.15  val_loss=83.67  lr=0.000687
+Epoch  39/100  loss=54.49  recon=47.31  kl=7.19  val_loss=56.93  lr=0.000687
 
 [cell 12]
-Epoch  40/100  loss=75.84  recon=51.77  kl=24.08  val_loss=79.22  lr=0.000673
+Epoch  40/100  loss=52.33  recon=45.58  kl=6.75  val_loss=55.42  lr=0.000673
 
 [cell 12]
-Epoch  41/100  loss=75.44  recon=51.42  kl=24.02  val_loss=78.28  lr=0.000658
+Epoch  41/100  loss=52.20  recon=45.52  kl=6.68  val_loss=53.94  lr=0.000658
 
 [cell 12]
-Epoch  42/100  loss=74.54  recon=50.44  kl=24.10  val_loss=77.21  lr=0.000643
+Epoch  42/100  loss=50.63  recon=44.10  kl=6.54  val_loss=55.07  lr=0.000643
 
 [cell 12]
-Epoch  43/100  loss=73.15  recon=49.47  kl=23.67  val_loss=76.76  lr=0.000628
+Epoch  43/100  loss=49.44  recon=43.15  kl=6.29  val_loss=51.69  lr=0.000628
 
 [cell 12]
-Epoch  44/100  loss=72.72  recon=48.85  kl=23.88  val_loss=76.37  lr=0.000613
+Epoch  44/100  loss=49.30  recon=43.01  kl=6.29  val_loss=50.80  lr=0.000613
 
 [cell 12]
-Epoch  45/100  loss=71.74  recon=48.24  kl=23.50  val_loss=75.96  lr=0.000598
+Epoch  45/100  loss=48.59  recon=42.29  kl=6.30  val_loss=50.67  lr=0.000598
 
 [cell 12]
-Epoch  46/100  loss=71.40  recon=47.85  kl=23.56  val_loss=75.47  lr=0.000582
+Epoch  46/100  loss=47.84  recon=41.67  kl=6.17  val_loss=49.43  lr=0.000582
 
 [cell 12]
-Epoch  47/100  loss=71.01  recon=47.36  kl=23.65  val_loss=75.31  lr=0.000567
+Epoch  47/100  loss=46.81  recon=40.77  kl=6.03  val_loss=49.52  lr=0.000567
 
 [cell 12]
-Epoch  48/100  loss=70.13  recon=46.66  kl=23.48  val_loss=74.61  lr=0.000552
+Epoch  48/100  loss=46.30  recon=40.34  kl=5.96  val_loss=48.46  lr=0.000552
 
 [cell 12]
-Epoch  49/100  loss=69.61  recon=46.34  kl=23.28  val_loss=73.44  lr=0.000536
+Epoch  49/100  loss=45.89  recon=40.04  kl=5.85  val_loss=49.14  lr=0.000536
 
 [cell 12]
-Epoch  50/100  loss=68.69  recon=45.44  kl=23.25  val_loss=71.28  lr=0.000521
+Epoch  50/100  loss=45.17  recon=39.27  kl=5.90  val_loss=47.07  lr=0.000521
 
 [cell 12]
-Epoch  51/100  loss=67.49  recon=44.40  kl=23.10  val_loss=72.38  lr=0.000505
+Epoch  51/100  loss=44.50  recon=38.73  kl=5.78  val_loss=47.56  lr=0.000505
 
 [cell 12]
-Epoch  52/100  loss=67.22  recon=44.11  kl=23.11  val_loss=70.84  lr=0.000489
+Epoch  52/100  loss=43.10  recon=37.60  kl=5.50  val_loss=44.87  lr=0.000489
 
 [cell 12]
-Epoch  53/100  loss=66.05  recon=43.17  kl=22.88  val_loss=71.17  lr=0.000474
+Epoch  53/100  loss=42.96  recon=37.62  kl=5.35  val_loss=46.69  lr=0.000474
 
 [cell 12]
-Epoch  54/100  loss=66.16  recon=43.16  kl=23.00  val_loss=69.36  lr=0.000458
+Epoch  54/100  loss=43.30  recon=37.61  kl=5.69  val_loss=46.84  lr=0.000458
 
 [cell 12]
-Epoch  55/100  loss=65.74  recon=42.88  kl=22.86  val_loss=70.41  lr=0.000443
+Epoch  55/100  loss=42.16  recon=36.70  kl=5.46  val_loss=43.50  lr=0.000443
 
 [cell 12]
-Epoch  56/100  loss=64.99  recon=42.11  kl=22.88  val_loss=68.73  lr=0.000428
+Epoch  56/100  loss=41.71  recon=36.41  kl=5.30  val_loss=43.79  lr=0.000428
 
 [cell 12]
-Epoch  57/100  loss=64.10  recon=41.35  kl=22.75  val_loss=67.70  lr=0.000412
+Epoch  57/100  loss=41.24  recon=35.98  kl=5.26  val_loss=43.18  lr=0.000412
 
 [cell 12]
-Epoch  58/100  loss=63.72  recon=41.07  kl=22.65  val_loss=67.67  lr=0.000397
+Epoch  58/100  loss=40.95  recon=35.69  kl=5.26  val_loss=42.58  lr=0.000397
 
 [cell 12]
-Epoch  59/100  loss=63.27  recon=40.62  kl=22.65  val_loss=67.58  lr=0.000382
+Epoch  59/100  loss=40.20  recon=35.12  kl=5.08  val_loss=43.21  lr=0.000382
 
 [cell 12]
-Epoch  60/100  loss=62.80  recon=40.17  kl=22.63  val_loss=67.69  lr=0.000367
+Epoch  60/100  loss=39.40  recon=34.39  kl=5.01  val_loss=41.97  lr=0.000367
 
 [cell 12]
-Epoch  61/100  loss=62.45  recon=39.99  kl=22.46  val_loss=66.88  lr=0.000352
+Epoch  61/100  loss=39.24  recon=34.33  kl=4.91  val_loss=41.14  lr=0.000352
 
 [cell 12]
-Epoch  62/100  loss=61.95  recon=39.50  kl=22.45  val_loss=66.37  lr=0.000337
+Epoch  62/100  loss=38.60  recon=33.79  kl=4.81  val_loss=41.45  lr=0.000337
 
 [cell 12]
-Epoch  63/100  loss=61.69  recon=39.18  kl=22.51  val_loss=65.73  lr=0.000323
+Epoch  63/100  loss=38.68  recon=33.85  kl=4.83  val_loss=41.63  lr=0.000323
 
 [cell 12]
-Epoch  64/100  loss=61.32  recon=38.77  kl=22.54  val_loss=65.24  lr=0.000308
+Epoch  64/100  loss=38.51  recon=33.70  kl=4.81  val_loss=41.08  lr=0.000308
 
 [cell 12]
-Epoch  65/100  loss=60.96  recon=38.51  kl=22.44  val_loss=65.55  lr=0.000294
+Epoch  65/100  loss=37.62  recon=32.85  kl=4.77  val_loss=39.73  lr=0.000294
 
 [cell 12]
-Epoch  66/100  loss=60.54  recon=38.20  kl=22.34  val_loss=64.74  lr=0.000280
+Epoch  66/100  loss=36.92  recon=32.34  kl=4.58  val_loss=39.97  lr=0.000280
 
 [cell 12]
-Epoch  67/100  loss=60.28  recon=37.95  kl=22.33  val_loss=64.05  lr=0.000267
+Epoch  67/100  loss=36.83  recon=32.29  kl=4.54  val_loss=39.16  lr=0.000267
 
 [cell 12]
-Epoch  68/100  loss=59.63  recon=37.26  kl=22.37  val_loss=64.24  lr=0.000253
+Epoch  68/100  loss=36.39  recon=31.90  kl=4.49  val_loss=38.46  lr=0.000253
 
 [cell 12]
-Epoch  69/100  loss=59.54  recon=37.21  kl=22.33  val_loss=63.80  lr=0.000240
+Epoch  69/100  loss=36.01  recon=31.60  kl=4.41  val_loss=38.83  lr=0.000240
 
 [cell 12]
-Epoch  70/100  loss=59.22  recon=36.85  kl=22.37  val_loss=63.66  lr=0.000227
+Epoch  70/100  loss=35.69  recon=31.35  kl=4.34  val_loss=39.03  lr=0.000227
 
 [cell 12]
-Epoch  71/100  loss=58.87  recon=36.59  kl=22.28  val_loss=62.82  lr=0.000214
+Epoch  71/100  loss=35.81  recon=31.45  kl=4.36  val_loss=38.35  lr=0.000214
 
 [cell 12]
-Epoch  72/100  loss=58.61  recon=36.38  kl=22.24  val_loss=62.78  lr=0.000202
+Epoch  72/100  loss=35.28  recon=31.01  kl=4.27  val_loss=38.08  lr=0.000202
 
 [cell 12]
-Epoch  73/100  loss=58.09  recon=36.05  kl=22.04  val_loss=62.81  lr=0.000189
+Epoch  73/100  loss=35.25  recon=30.98  kl=4.27  val_loss=37.94  lr=0.000189
 
 [cell 12]
-Epoch  74/100  loss=57.95  recon=35.90  kl=22.05  val_loss=62.10  lr=0.000178
+Epoch  74/100  loss=34.97  recon=30.73  kl=4.24  val_loss=37.81  lr=0.000178
 
 [cell 12]
-Epoch  75/100  loss=57.79  recon=35.60  kl=22.19  val_loss=62.16  lr=0.000166
+Epoch  75/100  loss=34.89  recon=30.67  kl=4.23  val_loss=37.24  lr=0.000166
 
 [cell 12]
-Epoch  76/100  loss=57.49  recon=35.42  kl=22.07  val_loss=62.08  lr=0.000155
+Epoch  76/100  loss=34.43  recon=30.25  kl=4.18  val_loss=37.00  lr=0.000155
 
 [cell 12]
-Epoch  77/100  loss=57.16  recon=35.17  kl=21.99  val_loss=61.68  lr=0.000144
+Epoch  77/100  loss=34.00  recon=29.91  kl=4.09  val_loss=36.49  lr=0.000144
 
 [cell 12]
-Epoch  78/100  loss=57.07  recon=35.03  kl=22.04  val_loss=61.63  lr=0.000134
+Epoch  78/100  loss=33.81  recon=29.78  kl=4.03  val_loss=36.74  lr=0.000134
 
 [cell 12]
-Epoch  79/100  loss=56.99  recon=34.88  kl=22.10  val_loss=61.17  lr=0.000124
+Epoch  79/100  loss=33.70  recon=29.72  kl=3.99  val_loss=36.25  lr=0.000124
 
 [cell 12]
-Epoch  80/100  loss=56.64  recon=34.56  kl=22.08  val_loss=61.16  lr=0.000114
+Epoch  80/100  loss=33.45  recon=29.49  kl=3.96  val_loss=36.11  lr=0.000114
 
 [cell 12]
-Epoch  81/100  loss=56.46  recon=34.49  kl=21.97  val_loss=61.39  lr=0.000105
+Epoch  81/100  loss=33.42  recon=29.48  kl=3.94  val_loss=35.98  lr=0.000105
 
 [cell 12]
-Epoch  82/100  loss=56.32  recon=34.20  kl=22.12  val_loss=61.05  lr=0.000096
+Epoch  82/100  loss=33.18  recon=29.27  kl=3.91  val_loss=36.10  lr=0.000096
 
 [cell 12]
-Epoch  83/100  loss=56.12  recon=34.14  kl=21.98  val_loss=60.69  lr=0.000087
+Epoch  83/100  loss=33.12  recon=29.24  kl=3.89  val_loss=35.91  lr=0.000087
 
 [cell 12]
-Epoch  84/100  loss=56.16  recon=34.20  kl=21.96  val_loss=60.22  lr=0.000079
+Epoch  84/100  loss=32.86  recon=29.01  kl=3.86  val_loss=35.60  lr=0.000079
 
 [cell 12]
-Epoch  85/100  loss=55.84  recon=33.88  kl=21.95  val_loss=60.10  lr=0.000071
+Epoch  85/100  loss=32.63  recon=28.80  kl=3.83  val_loss=35.49  lr=0.000071
 
 [cell 12]
-Epoch  86/100  loss=55.70  recon=33.83  kl=21.88  val_loss=60.38  lr=0.000064
+Epoch  86/100  loss=32.59  recon=28.79  kl=3.79  val_loss=35.32  lr=0.000064
 
 [cell 12]
-Epoch  87/100  loss=55.59  recon=33.64  kl=21.95  val_loss=60.24  lr=0.000057
+Epoch  87/100  loss=32.53  recon=28.76  kl=3.77  val_loss=35.29  lr=0.000057
 
 [cell 12]
-Epoch  88/100  loss=55.57  recon=33.64  kl=21.93  val_loss=60.67  lr=0.000051
+Epoch  88/100  loss=32.32  recon=28.57  kl=3.75  val_loss=35.14  lr=0.000051
 
 [cell 12]
-Epoch  89/100  loss=55.44  recon=33.56  kl=21.89  val_loss=59.87  lr=0.000045
+Epoch  89/100  loss=32.38  recon=28.64  kl=3.74  val_loss=34.99  lr=0.000045
 
 [cell 12]
-Epoch  90/100  loss=55.37  recon=33.50  kl=21.87  val_loss=59.78  lr=0.000039
+Epoch  90/100  loss=32.20  recon=28.48  kl=3.72  val_loss=34.94  lr=0.000039
 
 [cell 12]
-Epoch  91/100  loss=55.21  recon=33.26  kl=21.95  val_loss=59.98  lr=0.000034
+Epoch  91/100  loss=32.13  recon=28.42  kl=3.72  val_loss=34.84  lr=0.000034
 
 [cell 12]
-Epoch  92/100  loss=55.14  recon=33.27  kl=21.87  val_loss=60.20  lr=0.000030
+Epoch  92/100  loss=32.09  recon=28.39  kl=3.69  val_loss=34.88  lr=0.000030
 
 [cell 12]
-Epoch  93/100  loss=55.05  recon=33.19  kl=21.86  val_loss=60.08  lr=0.000026
+Epoch  93/100  loss=32.07  recon=28.38  kl=3.69  val_loss=34.86  lr=0.000026
 
 [cell 12]
-Epoch  94/100  loss=55.05  recon=33.13  kl=21.92  val_loss=59.88  lr=0.000022
+Epoch  94/100  loss=31.98  recon=28.30  kl=3.68  val_loss=34.71  lr=0.000022
 
 [cell 12]
-Epoch  95/100  loss=54.99  recon=33.06  kl=21.93  val_loss=59.88  lr=0.000019
+Epoch  95/100  loss=31.89  recon=28.22  kl=3.67  val_loss=34.64  lr=0.000019
 
 [cell 12]
-Epoch  96/100  loss=54.83  recon=33.05  kl=21.78  val_loss=60.17  lr=0.000016
+Epoch  96/100  loss=31.85  recon=28.19  kl=3.66  val_loss=34.64  lr=0.000016
 
 [cell 12]
-Epoch  97/100  loss=54.92  recon=33.14  kl=21.78  val_loss=59.47  lr=0.000014
+Epoch  97/100  loss=31.84  recon=28.19  kl=3.65  val_loss=34.60  lr=0.000014
 
 [cell 12]
-Epoch  98/100  loss=55.03  recon=33.08  kl=21.95  val_loss=59.47  lr=0.000012
+Epoch  98/100  loss=31.88  recon=28.23  kl=3.65  val_loss=34.61  lr=0.000012
 
 [cell 12]
-Epoch  99/100  loss=54.83  recon=32.88  kl=21.95  val_loss=59.83  lr=0.000011
+Epoch  99/100  loss=31.82  recon=28.16  kl=3.65  val_loss=34.59  lr=0.000011
 
 [cell 12]
-Epoch 100/100  loss=54.84  recon=33.05  kl=21.79  val_loss=59.98  lr=0.000010
+Epoch 100/100  loss=31.81  recon=28.17  kl=3.64  val_loss=34.57  lr=0.000010
 
-Best val_loss: 59.4687
+Best val_loss: 34.5651
 
 [cell 14]
 <Figure size 1200x400 with 2 Axes>
