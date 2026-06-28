@@ -8,9 +8,10 @@ checkpoints_beta/
 checkpoints_cvae_tf/
 checkpoints_cvae_pt/
 checkpoints_cvae_pl_tf/
-checkpoints_cvae_pl_pt/
 
-# 레이어 CVAE 체크포인트 — git 추적 (푸시 대상)
+# Streamlit 배포용 체크포인트 — git 추적
+!checkpoints_cvae_pl_pt/
+!checkpoints_cvae_pl_pt/**
 !checkpoints_cvae_layer_pt/
 !checkpoints_cvae_layer_pt/**
 
