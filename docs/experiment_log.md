@@ -291,6 +291,47 @@ VAE 인코더·디코더 모두에 action 레이블(one-hot)을 concat해 조건
 
 ---
 
+## CVAE + Perceptual Loss 파인튜닝 (09 TF, 09-1 PyTorch)
+
+기존 CVAE 가중치를 불러와 VGG16 perceptual loss를 추가해 파인튜닝.  
+체크포인트: `checkpoints_cvae_pl_tf/`, `checkpoints_cvae_pl_pt/` (기존 CVAE 덮어쓰지 않음)
+
+### 설정
+
+| 항목 | 값 |
+|------|-----|
+| 베이스 모델 | checkpoints_cvae_tf / checkpoints_cvae_pt |
+| VGG 레이어 | relu1_2, relu2_2 (64×64에 적합한 얕은 레이어) |
+| RGBA→RGB | 흰 배경 합성 (rgb×α + 1×(1-α)) |
+| epochs | 50 (파인튜닝) |
+| lr | 1e-4 (기존 1e-3보다 낮게) |
+| lambda_perc | 0.00005 (to_vgg_scaled 기준) |
+
+### 전처리 방식 비교
+
+| 함수 | 스케일 | perceptual 값 |
+|------|--------|--------------|
+| `to_vgg` | [0,1] ImageNet 정규화 | ~4 (MSE 대비 미미) |
+| `to_vgg_scaled` | [0,255] BGR mean-subtract (TF 방식) | ~수만 (강하게 작동) |
+
+PyTorch 09-1은 `to_vgg_scaled` 사용. TF와 동일한 스케일로 perceptual loss가 의미 있게 작동.
+
+### lambda 튜닝 실험
+
+| lambda | 방식 | 결과 |
+|--------|------|------|
+| 0.05 | to_vgg | MSE 대비 0.6%, 시각적 차이 없음 |
+| 0.5 | to_vgg | MSE 대비 6%, 시각적 차이 없음 |
+| 0.00005 | to_vgg_scaled | TF 0.05와 동등한 실효 기여 |
+
+### 최종 선택: PyTorch 09-1 (checkpoints_cvae_pl_pt/)
+
+- TF(09)가 loss 수치는 낮지만 수치는 전처리 스케일이 달라 직접 비교 불가
+- **결과물 품질 기준**: PyTorch β=1.5 + perceptual이 조건부 생성 안정성 및 복원 품질 모두 우수
+- Streamlit 앱에 연결할 모델로 확정
+
+---
+
 ## 현재 구현 현황
 
 | 기법 | 상태 |
@@ -302,4 +343,5 @@ VAE 인코더·디코더 모두에 action 레이블(one-hot)을 concat해 조건
 | Latent space 시각화 (VAE) | 완료 (07) — PCA, t-SNE, UMAP |
 | Latent space 시각화 (CVAE) | 완료 (07-1) — VAE vs CVAE std 비교 |
 | CVAE | 완료 (TF: 08 β=1.0 / PyTorch: 08-1 β=1.5) |
-| Perceptual loss | 미구현 |
+| CVAE + Perceptual Loss | 완료 (09 TF / 09-1 PT) — **PT 최종 선택** |
+| Streamlit 데모 앱 | 예정 |
