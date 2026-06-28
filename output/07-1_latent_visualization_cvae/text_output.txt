@@ -1,0 +1,73 @@
+[cell 2]
+CWD: /Users/gomuseo/Desktop/Python/vae_test
+Device: mps
+
+[cell 4]
+CFG: latent_dim=128, num_classes=10, beta=1.5
+CVAE model loaded.
+
+[cell 6]
+Encoding... (1,000 images)
+
+[cell 6]
+Latent vector shape: (1000, 128)
+Action distribution: {'slash': 217, 'walk': 183, 'shoot': 104, 'jump': 92, 'thrust': 76, 'sit': 70, 'run': 70, 'other': 66, 'spellcast': 62, 'idle': 60}
+
+[cell 8]
+Character distribution: {'male': 402, 'teen': 201, 'pregnant': 167, 'muscular': 140, 'child': 90}
+Action distribution:    {'slash': 217, 'walk': 183, 'shoot': 104, 'jump': 92, 'thrust': 76, 'sit': 70, 'run': 70, 'other': 66, 'spellcast': 62, 'idle': 60}
+
+[cell 10]
+PCA explained variance: PC1=10.64%  PC2=9.96%
+
+[cell 10]
+<Figure size 1300x500 with 2 Axes>
+
+[cell 12]
+Running t-SNE...
+[t-SNE] Computing 121 nearest neighbors...
+[t-SNE] Indexed 1000 samples in 0.001s...
+[t-SNE] Computed neighbors for 1000 samples in 0.125s...
+[t-SNE] Computed conditional probabilities for sample 1000 / 1000
+[t-SNE] Mean sigma: 1.702372
+
+[cell 12]
+[t-SNE] KL divergence after 50 iterations with early exaggeration: 66.861450
+
+[cell 12]
+[t-SNE] KL divergence after 1000 iterations: 0.914843
+Done.
+
+[cell 12]
+<Figure size 1300x500 with 2 Axes>
+
+[cell 14]
+Group std comparison (CVAE vs VAE):
+     group      n    CVAE std    VAE std (07)
+      idle     60      0.1179          0.1292
+      walk    183      0.1263          0.1446
+       run     70      0.1578          0.1627
+
+[cell 14]
+<Figure size 1300x500 with 2 Axes>
+
+[cell 16]
+umap-learn not installed — run: pip install umap-learn
+
+[cell 18]
+group      n     mu mean      mu std
+---------------------------------------------
+        walk    183     -0.0010      0.3018
+        idle     60      0.0026      0.2961
+         run     70     -0.0017      0.3101
+       slash    217     -0.0015      0.3441
+       shoot    104     -0.0023      0.3152
+      thrust     76     -0.0020      0.2894
+        jump     92     -0.0037      0.3348
+         sit     70      0.0082      0.3025
+   spellcast     62     -0.0087      0.3072
+       other     66     -0.0011      0.3568
+
+All  mean=-0.0012  std=0.3195  (ideal: mean=0, std=1)
+
+[VAE ref]  mean≈-0.004  std≈0.360
