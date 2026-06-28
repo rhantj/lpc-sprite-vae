@@ -7,8 +7,6 @@ Model loaded.
 
 [cell 6]
 Encoding... (1,000 images)
-
-[cell 6]
 Latent vector shape: (1000, 128)
 
 [cell 8]
@@ -25,14 +23,10 @@ PCA explained variance: PC1=10.09%  PC2=9.46%
 Running t-SNE...
 [t-SNE] Computing 121 nearest neighbors...
 [t-SNE] Indexed 1000 samples in 0.000s...
-[t-SNE] Computed neighbors for 1000 samples in 0.139s...
+[t-SNE] Computed neighbors for 1000 samples in 0.099s...
 [t-SNE] Computed conditional probabilities for sample 1000 / 1000
 [t-SNE] Mean sigma: 1.889558
-
-[cell 12]
 [t-SNE] KL divergence after 50 iterations with early exaggeration: 66.490875
-
-[cell 12]
 [t-SNE] KL divergence after 1000 iterations: 0.770601
 Done.
 
@@ -48,7 +42,18 @@ idle: n=  60  mean std=0.1292
 <Figure size 1300x500 with 2 Axes>
 
 [cell 16]
-umap-learn not installed — run: pip install umap-learn
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+
+[cell 16]
+Running UMAP...
+
+[cell 16]
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+
+[cell 16]
+<Figure size 1300x500 with 2 Axes>
 
 [cell 18]
 group      n     mu mean      mu std
