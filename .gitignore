@@ -1,7 +1,7 @@
 # 데이터셋 (용량 과다)
 dataset/
 
-# 체크포인트 (모델 가중치)
+# 체크포인트 (모델 가중치) — 아래 목록은 git 제외
 checkpoints_tf/
 checkpoints_pt/
 checkpoints_beta/
@@ -9,6 +9,10 @@ checkpoints_cvae_tf/
 checkpoints_cvae_pt/
 checkpoints_cvae_pl_tf/
 checkpoints_cvae_pl_pt/
+
+# 레이어 CVAE 체크포인트 — git 추적 (푸시 대상)
+!checkpoints_cvae_layer_pt/
+!checkpoints_cvae_layer_pt/**
 
 # Python
 __pycache__/
