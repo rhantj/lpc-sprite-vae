@@ -80,4 +80,4 @@ checkpoints_cvae_pl_pt/   # PyTorch CVAE + Perceptual Loss ★ Streamlit 사용
 | batch_size | 64 | 128 | 128 |
 | learning_rate | 1e-3 | 1e-3 | 1e-4 |
 | beta | 1.0 | 1.5 (PT) | 1.5 (PT) |
-| lambda_perc | — | — | 0.00005 |
+| lambda_perc | — | — | 1.0 |
