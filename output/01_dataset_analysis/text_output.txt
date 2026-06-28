@@ -1,0 +1,129 @@
+[cell 3]
+[FILE] CREDITS.csv                (3,871 KB)
+[FILE] LICENSE                    (34 KB)
+[FILE] README.md                  (15 KB)
+[DIR]  palette_definitions        (19 files)
+[DIR]  processed                  (2,848,901 files)
+[DIR]  sheet_definitions          (765 files)
+[DIR]  sources                    (64 files)
+[DIR]  spritesheets               (144,732 files)
+
+[cell 5]
+총 PNG 파일: 144,699개
+
+  shield       24,401  ████████████████████████████████████████████████
+  hat          21,852  ███████████████████████████████████████████
+  facial       18,090  ████████████████████████████████████
+  body         14,258  ████████████████████████████
+  head         13,554  ███████████████████████████
+  feet         12,893  █████████████████████████
+  torso        11,413  ██████████████████████
+  legs         10,321  ████████████████████
+  neck          7,475  ██████████████
+  eyes          3,091  ██████
+  hair          2,289  ████
+  dress         1,997  ███
+  weapon        1,455  ██
+  backpack        948  █
+  shoulders       241  
+  beards          196  
+  arms            146  
+  cape             38  
+  tools            28  
+  shadow            7  
+  quiver            6
+
+[cell 6]
+<Figure size 1000x500 with 1 Axes>
+
+[cell 8]
+샘플 수: 3,000개
+
+=== 이미지 크기 상위 10 ===
+   128x256  (2x4 frames)  →  518개
+   832x256  (13x4 frames)  →  485개
+   192x256  (3x4 frames)  →  342개
+   320x256  (5x4 frames)  →  339개
+   384x256  (6x4 frames)  →  333개
+   512x256  (8x4 frames)  →  333개
+   384x 64  (6x1 frames)  →  321개
+   576x256  (9x4 frames)  →  167개
+   448x256  (7x4 frames)  →  162개
+
+=== 색상 모드 ===
+  P: 3000개
+
+[cell 9]
+<Figure size 1000x300 with 1 Axes>
+
+[cell 11]
+<Figure size 1400x400 with 3 Axes>
+
+[cell 13]
+시트: shield/crusader2/male/fg/walk.png
+추출된 유효 프레임: 27개
+
+[cell 13]
+<Figure size 960x280 with 16 Axes>
+
+[cell 15]
+processed/body 총 파일: 5402개
+
+[cell 15]
+<Figure size 1200x400 with 2 Axes>
+
+[cell 17]
+<Figure size 1200x400 with 2 Axes>
+
+[cell 17]
+투명 비율  — mean: 94.0%, min: 74.9%, max: 100.0%
+고유 색상  — mean: 6.3, min: 1, max: 17
+
+[cell 19]
+<Figure size 1400x700 with 32 Axes>
+
+[cell 21]
+<Figure size 840x840 with 36 Axes>
+
+[cell 23]
+<Figure size 1400x750 with 5 Axes>
+
+[cell 25]
+<Figure size 1200x300 with 4 Axes>
+
+[cell 25]
+RGBA 텐서 shape: (64, 64, 4), range: [0.00, 1.00]
+RGB  텐서 shape: (64, 64, 3),  range: [0.10, 1.00]
+
+[cell 27]
+샘플 5,000개 기준 프레임 합계: 116,938
+전체 PNG 대비 비율: 28.9x
+추정 총 추출 가능 프레임: ~3,384,162개
+
+[cell 27]
+<Figure size 1100x500 with 1 Axes>
+
+[cell 29]
+=======================================================
+  데이터셋 분석 요약
+=======================================================
+  원본 PNG 파일 수           : 144,699
+  카테고리 수                : 21
+  단일 프레임 크기             : 64 × 64 px
+  색상 채널                 : RGBA (4ch)
+  평균 투명 픽셀 비율           : 94.0%
+  평균 고유 색상 수            : 6.3색 (팔레트 기반)
+  processed/body 프레임    : 5402개
+  체형 종류                 : male, female, child, teen, muscular, pregnant
+  애니메이션 종류              : idle, walk, slash, jump, sit, hurt
+
+=======================================================
+  VAE 구현 권고사항
+=======================================================
+  [입력 크기] 64×64 고정 → 전처리 불필요
+  [채널] RGBA 4채널 권장 (알파로 배경/전경 분리)
+  [정규화] [0,1] float32 (÷255)
+  [데이터 확장] 스프라이트시트 전체 크롭 → 수십만 프레임 확보 가능
+  [모델 선택] body만 → 단순 VAE / 전 카테고리 → 조건부 cVAE 권장
+  [필터링] 알파 max=0인 완전 투명 프레임 제거
+  [클래스 불균형] shield(24K) vs quiver(6개) → 카테고리별 샘플링 필요

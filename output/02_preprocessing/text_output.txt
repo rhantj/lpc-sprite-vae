@@ -1,0 +1,221 @@
+[cell 1]
+CPU workers : 7
+Spritesheets: /Users/gomuseo/Desktop/Python/vae_test/dataset/spritesheets
+Processed   : /Users/gomuseo/Desktop/Python/vae_test/dataset/processed
+
+[cell 3]
+Total spritesheet files : 144,699
+Categories              : 21
+
+[cell 4]
+Top 10 spritesheet sizes (w×h)  →  frames per sheet
+   384×256  (6×4 frames)  —  446 sheets
+   832×256  (13×4 frames)  —  443 sheets
+   512×256  (8×4 frames)  —  421 sheets
+   384× 64  (6×1 frames)  —  395 sheets
+   448×256  (7×4 frames)  —  294 sheets
+   576×256  (9×4 frames)  —  294 sheets
+   192×256  (3×4 frames)  —  293 sheets
+   128×256  (2×4 frames)  —  283 sheets
+   320×256  (5×4 frames)  —  131 sheets
+
+[cell 5]
+<Figure size 1400x500 with 2 Axes>
+
+[cell 7]
+<Figure size 1600x900 with 12 Axes>
+
+[cell 9]
+<Figure size 1200x400 with 2 Axes>
+
+[cell 11]
+sheet_to_frames() and process_sheet() defined.
+
+[cell 13]
+Demo sheet : body/bodies/male/walk.png
+Size       : 576×256 px
+Grid       : 9 cols × 4 rows  (36 cells)
+
+[cell 13]
+<Figure size 1440x640 with 1 Axes>
+
+[cell 14]
+Total cells    : 36
+Fully transparent (discarded): 0
+Valid frames   : 36
+
+[cell 14]
+<Figure size 855x420 with 36 Axes>
+
+[cell 16]
+1.0%  [  1,446/144,699]  saved=    2,211  skipped=  31,188  elapsed=0.1m  ETA=6.6m
+    2.0%  [  2,892/144,699]  saved=   21,304  skipped=  31,188  elapsed=0.2m  ETA=7.5m
+    3.0%  [  4,338/144,699]  saved=   37,365  skipped=  31,188  elapsed=0.2m  ETA=7.6m
+    4.0%  [  5,784/144,699]  saved=   56,551  skipped=  31,188  elapsed=0.3m  ETA=8.2m
+    5.0%  [  7,230/144,699]  saved=   72,420  skipped=  31,188  elapsed=0.4m  ETA=8.0m
+    6.0%  [  8,676/144,699]  saved=   91,727  skipped=  31,188  elapsed=0.5m  ETA=8.1m
+    7.0%  [ 10,122/144,699]  saved=  112,733  skipped=  31,188  elapsed=0.6m  ETA=8.3m
+    8.0%  [ 11,568/144,699]  saved=  136,338  skipped=  31,188  elapsed=0.7m  ETA=8.5m
+    9.0%  [ 13,014/144,699]  saved=  161,858  skipped=  31,188  elapsed=0.9m  ETA=8.7m
+   10.0%  [ 14,460/144,699]  saved=  181,207  skipped=  31,188  elapsed=1.0m  ETA=8.6m
+   11.0%  [ 15,906/144,699]  saved=  197,343  skipped=  40,344  elapsed=1.0m  ETA=8.4m
+   12.0%  [ 17,352/144,699]  saved=  197,343  skipped=  77,925  elapsed=1.1m  ETA=7.8m
+   13.0%  [ 18,798/144,699]  saved=  197,343  skipped= 106,891  elapsed=1.1m  ETA=7.2m
+   14.0%  [ 20,244/144,699]  saved=  197,343  skipped= 133,146  elapsed=1.1m  ETA=6.7m
+   15.0%  [ 21,690/144,699]  saved=  197,343  skipped= 163,832  elapsed=1.1m  ETA=6.3m
+   16.0%  [ 23,136/144,699]  saved=  197,343  skipped= 189,598  elapsed=1.1m  ETA=6.0m
+   17.0%  [ 24,582/144,699]  saved=  197,343  skipped= 217,294  elapsed=1.2m  ETA=5.6m
+   18.0%  [ 26,028/144,699]  saved=  197,343  skipped= 244,995  elapsed=1.2m  ETA=5.3m
+   19.0%  [ 27,474/144,699]  saved=  197,343  skipped= 271,883  elapsed=1.2m  ETA=5.1m
+   20.0%  [ 28,920/144,699]  saved=  197,343  skipped= 299,259  elapsed=1.2m  ETA=4.8m
+   21.0%  [ 30,366/144,699]  saved=  197,343  skipped= 325,659  elapsed=1.2m  ETA=4.6m
+   22.0%  [ 31,812/144,699]  saved=  197,343  skipped= 346,635  elapsed=1.2m  ETA=4.4m
+   23.0%  [ 33,258/144,699]  saved=  197,343  skipped= 364,638  elapsed=1.3m  ETA=4.2m
+   24.0%  [ 34,704/144,699]  saved=  197,343  skipped= 396,665  elapsed=1.3m  ETA=4.0m
+   25.0%  [ 36,150/144,699]  saved=  197,343  skipped= 431,333  elapsed=1.3m  ETA=3.9m
+   26.0%  [ 37,596/144,699]  saved=  197,343  skipped= 465,319  elapsed=1.3m  ETA=3.7m
+   27.0%  [ 39,042/144,699]  saved=  197,343  skipped= 498,905  elapsed=1.3m  ETA=3.6m
+   28.0%  [ 40,488/144,699]  saved=  197,343  skipped= 532,995  elapsed=1.4m  ETA=3.5m
+   29.0%  [ 41,934/144,699]  saved=  197,343  skipped= 567,313  elapsed=1.4m  ETA=3.4m
+   30.0%  [ 43,380/144,699]  saved=  197,343  skipped= 600,137  elapsed=1.4m  ETA=3.2m
+   31.0%  [ 44,826/144,699]  saved=  197,343  skipped= 634,289  elapsed=1.4m  ETA=3.1m
+   32.0%  [ 46,272/144,699]  saved=  197,343  skipped= 668,081  elapsed=1.4m  ETA=3.0m
+   33.0%  [ 47,718/144,699]  saved=  197,343  skipped= 702,311  elapsed=1.4m  ETA=2.9m
+   34.0%  [ 49,164/144,699]  saved=  197,343  skipped= 735,277  elapsed=1.5m  ETA=2.8m
+   35.0%  [ 50,610/144,699]  saved=  197,343  skipped= 769,303  elapsed=1.5m  ETA=2.7m
+   36.0%  [ 52,056/144,699]  saved=  197,343  skipped= 802,778  elapsed=1.5m  ETA=2.7m
+   37.0%  [ 53,502/144,699]  saved=  197,343  skipped= 850,999  elapsed=1.5m  ETA=2.6m
+   38.0%  [ 54,948/144,699]  saved=  197,343  skipped= 884,170  elapsed=1.6m  ETA=2.5m
+   39.0%  [ 56,394/144,699]  saved=  197,343  skipped= 917,542  elapsed=1.6m  ETA=2.5m
+   40.0%  [ 57,840/144,699]  saved=  197,343  skipped= 951,294  elapsed=1.6m  ETA=2.4m
+   41.0%  [ 59,286/144,699]  saved=  197,343  skipped= 984,654  elapsed=1.6m  ETA=2.3m
+   42.0%  [ 60,732/144,699]  saved=  197,343  skipped=1,018,538  elapsed=1.6m  ETA=2.3m
+   43.0%  [ 62,178/144,699]  saved=  197,343  skipped=1,051,461  elapsed=1.7m  ETA=2.2m
+   44.0%  [ 63,624/144,699]  saved=  197,343  skipped=1,085,057  elapsed=1.7m  ETA=2.1m
+   45.0%  [ 65,070/144,699]  saved=  197,343  skipped=1,117,711  elapsed=1.7m  ETA=2.1m
+   46.0%  [ 66,516/144,699]  saved=  197,343  skipped=1,150,547  elapsed=1.7m  ETA=2.0m
+   47.0%  [ 67,962/144,699]  saved=  197,343  skipped=1,182,491  elapsed=1.7m  ETA=2.0m
+   48.0%  [ 69,408/144,699]  saved=  197,343  skipped=1,218,059  elapsed=1.8m  ETA=1.9m
+   49.0%  [ 70,854/144,699]  saved=  197,343  skipped=1,250,455  elapsed=1.8m  ETA=1.8m
+   50.0%  [ 72,300/144,699]  saved=  197,343  skipped=1,284,405  elapsed=1.8m  ETA=1.8m
+   51.0%  [ 73,746/144,699]  saved=  197,343  skipped=1,317,222  elapsed=1.8m  ETA=1.7m
+   52.0%  [ 75,192/144,699]  saved=  197,343  skipped=1,351,895  elapsed=1.8m  ETA=1.7m
+   53.0%  [ 76,638/144,699]  saved=  197,343  skipped=1,383,938  elapsed=1.8m  ETA=1.6m
+   54.0%  [ 78,084/144,699]  saved=  197,343  skipped=1,410,948  elapsed=1.9m  ETA=1.6m
+   55.0%  [ 79,530/144,699]  saved=  197,343  skipped=1,442,980  elapsed=1.9m  ETA=1.5m
+   56.0%  [ 80,976/144,699]  saved=  197,343  skipped=1,472,201  elapsed=1.9m  ETA=1.5m
+   57.0%  [ 82,422/144,699]  saved=  197,343  skipped=1,500,983  elapsed=1.9m  ETA=1.4m
+   58.0%  [ 83,868/144,699]  saved=  197,343  skipped=1,532,827  elapsed=1.9m  ETA=1.4m
+   59.0%  [ 85,314/144,699]  saved=  197,343  skipped=1,558,153  elapsed=2.0m  ETA=1.4m
+   60.0%  [ 86,760/144,699]  saved=  197,343  skipped=1,585,879  elapsed=2.0m  ETA=1.3m
+   61.0%  [ 88,206/144,699]  saved=  197,343  skipped=1,617,515  elapsed=2.0m  ETA=1.3m
+   62.0%  [ 89,652/144,699]  saved=  197,343  skipped=1,651,875  elapsed=2.0m  ETA=1.2m
+   63.0%  [ 91,098/144,699]  saved=  197,343  skipped=1,685,060  elapsed=2.0m  ETA=1.2m
+   64.0%  [ 92,544/144,699]  saved=  197,343  skipped=1,719,336  elapsed=2.0m  ETA=1.2m
+   65.0%  [ 93,990/144,699]  saved=  197,343  skipped=1,752,818  elapsed=2.1m  ETA=1.1m
+   66.0%  [ 95,436/144,699]  saved=  197,343  skipped=1,786,936  elapsed=2.1m  ETA=1.1m
+   67.0%  [ 96,882/144,699]  saved=  197,343  skipped=1,821,772  elapsed=2.1m  ETA=1.0m
+   68.0%  [ 98,328/144,699]  saved=  197,343  skipped=1,855,712  elapsed=2.1m  ETA=1.0m
+   69.0%  [ 99,774/144,699]  saved=  197,343  skipped=1,888,424  elapsed=2.1m  ETA=1.0m
+   70.0%  [101,220/144,699]  saved=  197,343  skipped=1,918,189  elapsed=2.2m  ETA=0.9m
+   71.0%  [102,666/144,699]  saved=  197,343  skipped=1,947,447  elapsed=2.2m  ETA=0.9m
+   72.0%  [104,112/144,699]  saved=  197,343  skipped=1,975,935  elapsed=2.2m  ETA=0.9m
+   73.0%  [105,558/144,699]  saved=  197,343  skipped=2,007,613  elapsed=2.2m  ETA=0.8m
+   73.9%  [107,004/144,699]  saved=  197,343  skipped=2,034,875  elapsed=2.2m  ETA=0.8m
+   74.9%  [108,450/144,699]  saved=  197,343  skipped=2,053,339  elapsed=2.3m  ETA=0.8m
+   75.9%  [109,896/144,699]  saved=  197,343  skipped=2,075,173  elapsed=2.3m  ETA=0.7m
+   76.9%  [111,342/144,699]  saved=  197,343  skipped=2,093,485  elapsed=2.3m  ETA=0.7m
+   77.9%  [112,788/144,699]  saved=  197,343  skipped=2,114,971  elapsed=2.3m  ETA=0.7m
+   78.9%  [114,234/144,699]  saved=  197,343  skipped=2,133,451  elapsed=2.3m  ETA=0.6m
+   79.9%  [115,680/144,699]  saved=  197,343  skipped=2,154,643  elapsed=2.3m  ETA=0.6m
+   80.9%  [117,126/144,699]  saved=  197,343  skipped=2,173,477  elapsed=2.3m  ETA=0.6m
+   81.9%  [118,572/144,699]  saved=  197,343  skipped=2,193,271  elapsed=2.4m  ETA=0.5m
+   82.9%  [120,018/144,699]  saved=  197,343  skipped=2,206,213  elapsed=2.4m  ETA=0.5m
+   83.9%  [121,464/144,699]  saved=  197,343  skipped=2,221,456  elapsed=2.4m  ETA=0.5m
+   84.9%  [122,910/144,699]  saved=  197,343  skipped=2,233,924  elapsed=2.4m  ETA=0.4m
+   85.9%  [124,356/144,699]  saved=  197,343  skipped=2,247,856  elapsed=2.4m  ETA=0.4m
+   86.9%  [125,802/144,699]  saved=  197,343  skipped=2,260,344  elapsed=2.4m  ETA=0.4m
+   87.9%  [127,248/144,699]  saved=  197,343  skipped=2,272,624  elapsed=2.4m  ETA=0.3m
+   88.9%  [128,694/144,699]  saved=  197,343  skipped=2,285,524  elapsed=2.5m  ETA=0.3m
+   89.9%  [130,140/144,699]  saved=  197,343  skipped=2,299,132  elapsed=2.5m  ETA=0.3m
+   90.9%  [131,586/144,699]  saved=  197,343  skipped=2,316,484  elapsed=2.5m  ETA=0.2m
+   91.9%  [133,032/144,699]  saved=  197,343  skipped=2,354,020  elapsed=2.5m  ETA=0.2m
+   92.9%  [134,478/144,699]  saved=  197,343  skipped=2,387,160  elapsed=2.5m  ETA=0.2m
+   93.9%  [135,924/144,699]  saved=  197,343  skipped=2,427,055  elapsed=2.6m  ETA=0.2m
+   94.9%  [137,370/144,699]  saved=  197,343  skipped=2,468,223  elapsed=2.6m  ETA=0.1m
+   95.9%  [138,816/144,699]  saved=  197,343  skipped=2,508,775  elapsed=2.6m  ETA=0.1m
+   96.9%  [140,262/144,699]  saved=  197,343  skipped=2,549,855  elapsed=2.6m  ETA=0.1m
+   97.9%  [141,708/144,699]  saved=  197,343  skipped=2,577,535  elapsed=2.6m  ETA=0.1m
+   98.9%  [143,154/144,699]  saved=  197,343  skipped=2,615,430  elapsed=2.7m  ETA=0.0m
+   99.9%  [144,600/144,699]  saved=  197,343  skipped=2,650,238  elapsed=2.7m  ETA=0.0m
+  100.0%  [144,699/144,699]  saved=  197,343  skipped=2,651,709  elapsed=2.7m  ETA=0.0m
+
+Done in 2.7 min — saved=197,343  skipped=2,651,709
+
+[cell 18]
+Total processed frames : 3,046,247
+Categories             : 26
+
+  hat             503,299  (16.5%)
+  facial          351,280  (11.5%)
+  feet            301,302  ( 9.9%)
+  torso           295,414  ( 9.7%)
+  head            280,548  ( 9.2%)
+  shield          277,111  ( 9.1%)
+  legs            242,177  ( 8.0%)
+  body            199,615  ( 6.6%)
+  neck            150,356  ( 4.9%)
+  wings           100,264  ( 3.3%)
+  tail             93,593  ( 3.1%)
+  hair             67,894  ( 2.2%)
+  eyes             56,794  ( 1.9%)
+  dress            52,411  ( 1.7%)
+  weapon           33,543  ( 1.1%)
+  backpack         22,880  ( 0.8%)
+  shoulders         5,972  ( 0.2%)
+  beards            3,716  ( 0.1%)
+  arms              2,956  ( 0.1%)
+  wound             2,528  ( 0.1%)
+  cape                842  ( 0.0%)
+  tools               758  ( 0.0%)
+  prosthesis          532  ( 0.0%)
+  shadow              214  ( 0.0%)
+  quiver              178  ( 0.0%)
+  wheelchair           70  ( 0.0%)
+
+[cell 19]
+<Figure size 1200x500 with 1 Axes>
+
+[cell 21]
+<Figure size 600x1920 with 48 Axes>
+
+[cell 23]
+<Figure size 1200x400 with 2 Axes>
+
+[cell 25]
+/var/folders/lk/_s9hm0fx6kq9cbqvf92w9yd00000gn/T/ipykernel_49135/3690848769.py:74: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout()
+
+[cell 25]
+<Figure size 1800x600 with 4 Axes>
+
+[cell 26]
+<Figure size 1300x800 with 2 Axes>
+
+[cell 27]
+<Figure size 1300x400 with 2 Axes>
+
+[cell 29]
+----------------------------------------------------------------------------------
+Metric                                           Before                        After
+----------------------------------------------------------------------------------
+Total spritesheet files                         144,699                            —
+Total processed frames                                —                    3,046,247
+Avg frames per sheet                                  —                         21.1
+Frame size                                      various             64×64 px (fixed)
+Channels                                       P / RGBA                   RGBA (4ch)
+Transparent pixel ratio                           97.5%                        96.4%
+Avg unique colors                                     5                            5
+Fully-transparent frames                              —                    discarded
+Value range                                           — [0, 255]  →  [0.0, 1.0] after /255
+----------------------------------------------------------------------------------

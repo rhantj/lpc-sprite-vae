@@ -1,0 +1,60 @@
+[cell 2]
+CWD: /Users/gomuseo/Desktop/Python/vae_test
+Device: /GPU:0
+
+[cell 4]
+latent_dim=128  base_ch=32
+모델 로드 완료.
+
+[cell 6]
+body 이미지: 4,544장
+유틸 함수 정의 완료.
+
+[cell 8]
+A: bodies_female_walk_2_7_flip.png
+B: bodies_female_thrust_0_0.png
+C: bodies_pregnant_jump_2_4_flip.png
+
+[cell 9]
+<Figure size 600x180 with 4 Axes>
+
+[cell 12]
+키워드      파일 수
+---------------------------------
+              female       916
+                male       916
+                teen       916
+                walk       864
+            pregnant       764
+            muscular       608
+               slash       576
+                jump       480
+               child       424
+               shoot       416
+                 run       320
+              thrust       320
+           backslash       312
+                 sit       288
+           spellcast       280
+                idle       256
+                hurt       144
+           halfslash       144
+               emote        96
+              combat        64
+               climb        48
+
+[cell 13]
+그룹 A (sit): 50장
+그룹 B (shoot): 50장
+
+[cell 14]
+방향 벡터 norm: 2.3182
+
+[cell 14]
+<Figure size 800x250 with 1 Axes>
+
+[cell 16]
+<Figure size 750x600 with 20 Axes>
+
+[cell 18]
+<Figure size 500x600 with 12 Axes>

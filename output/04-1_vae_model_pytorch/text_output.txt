@@ -1,0 +1,153 @@
+[cell 2]
+CWD: /Users/gomuseo/Desktop/Python/vae_test
+PyTorch  : 2.12.1
+디바이스 : mps
+
+[cell 4]
+설정 완료.
+
+[cell 6]
+전체 프레임 : 4,544
+학습        : 4,454
+검증        : 90
+배치/에폭   : 34
+배치 shape  : torch.Size([128, 4, 64, 64])  dtype=torch.float32
+
+[cell 7]
+/var/folders/lk/_s9hm0fx6kq9cbqvf92w9yd00000gn/T/ipykernel_82480/3899110699.py:18: UserWarning: Glyph 54617 (\N{HANGUL SYLLABLE HAG}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/var/folders/lk/_s9hm0fx6kq9cbqvf92w9yd00000gn/T/ipykernel_82480/3899110699.py:18: UserWarning: Glyph 49845 (\N{HANGUL SYLLABLE SEUB}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/var/folders/lk/_s9hm0fx6kq9cbqvf92w9yd00000gn/T/ipykernel_82480/3899110699.py:18: UserWarning: Glyph 48176 (\N{HANGUL SYLLABLE BAE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/var/folders/lk/_s9hm0fx6kq9cbqvf92w9yd00000gn/T/ipykernel_82480/3899110699.py:18: UserWarning: Glyph 52824 (\N{HANGUL SYLLABLE CI}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/var/folders/lk/_s9hm0fx6kq9cbqvf92w9yd00000gn/T/ipykernel_82480/3899110699.py:18: UserWarning: Glyph 49368 (\N{HANGUL SYLLABLE SAEM}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/var/folders/lk/_s9hm0fx6kq9cbqvf92w9yd00000gn/T/ipykernel_82480/3899110699.py:18: UserWarning: Glyph 54540 (\N{HANGUL SYLLABLE PEUL}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/var/folders/lk/_s9hm0fx6kq9cbqvf92w9yd00000gn/T/ipykernel_82480/3899110699.py:18: UserWarning: Glyph 51109 (\N{HANGUL SYLLABLE JANG}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/IPython/core/pylabtools.py:170: UserWarning: Glyph 54617 (\N{HANGUL SYLLABLE HAG}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/IPython/core/pylabtools.py:170: UserWarning: Glyph 49845 (\N{HANGUL SYLLABLE SEUB}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/IPython/core/pylabtools.py:170: UserWarning: Glyph 48176 (\N{HANGUL SYLLABLE BAE}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/IPython/core/pylabtools.py:170: UserWarning: Glyph 52824 (\N{HANGUL SYLLABLE CI}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/IPython/core/pylabtools.py:170: UserWarning: Glyph 49368 (\N{HANGUL SYLLABLE SAEM}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/IPython/core/pylabtools.py:170: UserWarning: Glyph 54540 (\N{HANGUL SYLLABLE PEUL}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+/Users/gomuseo/Desktop/Python/.venv/lib/python3.10/site-packages/IPython/core/pylabtools.py:170: UserWarning: Glyph 51109 (\N{HANGUL SYLLABLE JANG}) missing from font(s) DejaVu Sans.
+  fig.canvas.print_figure(bytes_io, **kw)
+
+[cell 7]
+<Figure size 880x480 with 32 Axes>
+
+[cell 9]
+인코더 파라미터 : 1,740,448
+디코더 파라미터 : 1,219,236
+전체 파라미터   : 2,959,684
+
+[cell 10]
+입력      : torch.Size([4, 4, 64, 64])
+복원 출력 : torch.Size([4, 4, 64, 64])  범위=[0.078, 0.955]
+μ         : torch.Size([4, 128])
+log_var   : torch.Size([4, 128])
+
+[cell 12]
+총 손실   : 1680.924072
+복원 손실 : 1664.937500
+KL 발산   : 15.986611
+
+[cell 14]
+Early Stopping patience: 5 에폭
+Epoch   1/50  loss=5815.6573  val_loss=777.0383  lr=9.99e-03  ✓ best
+Epoch   2/50  loss=503.9578  val_loss=487.5492  lr=9.96e-03  ✓ best
+Epoch   3/50  loss=311.0679  val_loss=292.8457  lr=9.91e-03  ✓ best
+Epoch   4/50  loss=265.6117  val_loss=264.8734  lr=9.84e-03  ✓ best
+Epoch   5/50  loss=239.1115  val_loss=241.1567  lr=9.76e-03  ✓ best
+Epoch   6/50  loss=217.5774  val_loss=215.3842  lr=9.65e-03  ✓ best
+Epoch   7/50  loss=197.2784  val_loss=194.5356  lr=9.52e-03  ✓ best
+Epoch   8/50  loss=180.7298  val_loss=180.6700  lr=9.38e-03  ✓ best
+Epoch   9/50  loss=165.6396  val_loss=163.0863  lr=9.22e-03  ✓ best
+Epoch  10/50  loss=153.9038  val_loss=151.3625  lr=9.05e-03  ✓ best
+Epoch  11/50  loss=144.6712  val_loss=146.0376  lr=8.85e-03  ✓ best
+Epoch  12/50  loss=138.0025  val_loss=137.0227  lr=8.65e-03  ✓ best
+Epoch  13/50  loss=130.3517  val_loss=132.4779  lr=8.42e-03  ✓ best
+Epoch  14/50  loss=124.5230  val_loss=126.4255  lr=8.19e-03  ✓ best
+Epoch  15/50  loss=118.2262  val_loss=116.8458  lr=7.94e-03  ✓ best
+Epoch  16/50  loss=112.7526  val_loss=112.0575  lr=7.68e-03  ✓ best
+Epoch  17/50  loss=108.7921  val_loss=109.8573  lr=7.41e-03  ✓ best
+Epoch  18/50  loss=104.1081  val_loss=106.4429  lr=7.13e-03  ✓ best
+Epoch  19/50  loss=100.2960  val_loss=103.1717  lr=6.84e-03  ✓ best
+Epoch  20/50  loss=98.2173  val_loss=99.7246  lr=6.55e-03  ✓ best
+Epoch  21/50  loss=94.3302  val_loss=96.8009  lr=6.25e-03  ✓ best
+Epoch  22/50  loss=91.9027  val_loss=94.7517  lr=5.94e-03  ✓ best
+Epoch  23/50  loss=90.4251  val_loss=94.8577  lr=5.63e-03
+Epoch  24/50  loss=87.6981  val_loss=93.7074  lr=5.32e-03  ✓ best
+Epoch  25/50  loss=85.1901  val_loss=87.8367  lr=5.00e-03  ✓ best
+Epoch  26/50  loss=83.1929  val_loss=86.2008  lr=4.69e-03  ✓ best
+Epoch  27/50  loss=82.4596  val_loss=87.1443  lr=4.38e-03
+Epoch  28/50  loss=80.8036  val_loss=84.2207  lr=4.07e-03  ✓ best
+Epoch  29/50  loss=78.9296  val_loss=83.3286  lr=3.76e-03  ✓ best
+Epoch  30/50  loss=77.6923  val_loss=81.4452  lr=3.46e-03  ✓ best
+Epoch  31/50  loss=75.8161  val_loss=81.6717  lr=3.17e-03
+Epoch  32/50  loss=74.5645  val_loss=80.6636  lr=2.88e-03  ✓ best
+Epoch  33/50  loss=73.3407  val_loss=77.5966  lr=2.60e-03  ✓ best
+Epoch  34/50  loss=72.2379  val_loss=78.1613  lr=2.33e-03
+Epoch  35/50  loss=71.8074  val_loss=75.9117  lr=2.07e-03  ✓ best
+Epoch  36/50  loss=70.4550  val_loss=75.0931  lr=1.82e-03  ✓ best
+Epoch  37/50  loss=69.6885  val_loss=75.5018  lr=1.59e-03
+Epoch  38/50  loss=69.0292  val_loss=72.7661  lr=1.36e-03  ✓ best
+Epoch  39/50  loss=68.4841  val_loss=72.7657  lr=1.16e-03  ✓ best
+Epoch  40/50  loss=67.5486  val_loss=73.2609  lr=9.64e-04
+Epoch  41/50  loss=66.9976  val_loss=71.9249  lr=7.88e-04  ✓ best
+Epoch  42/50  loss=66.5377  val_loss=71.4906  lr=6.28e-04  ✓ best
+Epoch  43/50  loss=66.0632  val_loss=71.2391  lr=4.85e-04  ✓ best
+Epoch  44/50  loss=65.7176  val_loss=70.0124  lr=3.61e-04  ✓ best
+Epoch  45/50  loss=65.4970  val_loss=69.9176  lr=2.54e-04  ✓ best
+Epoch  46/50  loss=65.2531  val_loss=70.3255  lr=1.67e-04
+Epoch  47/50  loss=65.0305  val_loss=71.0655  lr=9.85e-05
+Epoch  48/50  loss=64.8492  val_loss=70.2035  lr=4.94e-05
+Epoch  49/50  loss=64.8858  val_loss=71.1396  lr=1.99e-05
+Epoch  50/50  loss=64.7029  val_loss=70.4823  lr=1.00e-05
+
+Early Stopping — 5 에폭 동안 개선 없음.
+
+학습 완료 — 소요 시간: 2.4분  실제 에폭: 50/50
+
+[cell 16]
+<Figure size 1500x400 with 3 Axes>
+
+[cell 18]
+최적 가중치 로드 완료.
+
+[cell 18]
+<Figure size 1120x320 with 16 Axes>
+
+[cell 20]
+<Figure size 880x480 with 32 Axes>
+
+[cell 22]
+<Figure size 1200x560 with 40 Axes>
+
+[cell 24]
+가중치 저장 → checkpoints_pt/final.pt
+설정값 저장 → checkpoints_pt/config.json
+모든 저장 완료.
+
+=== Streamlit 불러오기 예시 ===
+import json, torch
+from pathlib import Path
+
+with open('checkpoints_pt/config.json') as f:
+    cfg = json.load(f)
+
+model = VAE(cfg['channels'], cfg['base_channels'], cfg['latent_dim'])
+model.load_state_dict(torch.load('checkpoints_pt/best.pt', map_location='cpu'))
+model.eval()
+
+imgs = model.sample(16, torch.device('cpu'))  # (16, 4, 64, 64)

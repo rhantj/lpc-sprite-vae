@@ -1,0 +1,83 @@
+[cell 2]
+CWD: /Users/gomuseo/Desktop/Python/vae_test
+Device: mps
+
+[cell 4]
+실험 β 목록: [0.5, 1.0, 2.0, 4.0]
+
+[cell 6]
+학습: 4,454장  검증: 90장
+학습 배치 수: 34
+
+[cell 8]
+모델 / 손실 함수 정의 완료.
+
+[cell 10]
+── β=0.5 학습 시작 (patience=5) ──
+  ep   1  recon=1050.17  kl=29710.66  val_recon=816.07  val_kl=2014.15  ✓
+  ep  10  recon=119.84  kl=49.47  val_recon=114.98  val_kl=48.72  ✓
+  ep  20  recon=66.03  kl=43.23  val_recon=69.38  val_kl=43.15  ✓
+  ep  30  recon=46.42  kl=39.08  val_recon=48.98  val_kl=38.08  ✓
+  ep  40  recon=36.83  kl=37.01  val_recon=39.69  val_kl=36.65  
+  ep  50  recon=33.74  kl=36.49  val_recon=37.40  val_kl=36.29  
+  완료 — 2.4분  저장: checkpoints_beta/beta_0.5.pt
+
+── β=1.0 학습 시작 (patience=5) ──
+  ep   1  recon=1230.31  kl=608718.01  val_recon=577.21  val_kl=891.53  ✓
+  ep  10  recon=127.61  kl=30.96  val_recon=123.21  val_kl=31.54  ✓
+  ep  20  recon=74.04  kl=27.54  val_recon=74.09  val_kl=26.45  ✓
+  ep  30  recon=52.80  kl=26.54  val_recon=55.02  val_kl=25.96  ✓
+  ep  40  recon=43.02  kl=26.25  val_recon=46.16  val_kl=25.92  
+  ep  50  recon=39.83  kl=26.08  val_recon=42.46  val_kl=26.03  ✓
+  완료 — 2.4분  저장: checkpoints_beta/beta_1.0.pt
+
+── β=2.0 학습 시작 (patience=5) ──
+  ep   1  recon=1134.81  kl=18423.71  val_recon=525.74  val_kl=570.05  ✓
+  ep  10  recon=148.45  kl=18.53  val_recon=140.66  val_kl=19.43  ✓
+  ep  20  recon=89.50  kl=18.91  val_recon=88.21  val_kl=19.14  ✓
+  ep  30  recon=67.20  kl=18.51  val_recon=71.34  val_kl=17.90  ✓
+  ep  40  recon=55.86  kl=18.46  val_recon=60.68  val_kl=18.09  
+  ep  50  recon=52.47  kl=18.46  val_recon=58.15  val_kl=18.34  
+  완료 — 2.4분  저장: checkpoints_beta/beta_2.0.pt
+
+── β=4.0 학습 시작 (patience=5) ──
+  ep   1  recon=1276.12  kl=2909172.19  val_recon=817.89  val_kl=214.88  ✓
+  ep  10  recon=198.07  kl=11.14  val_recon=179.49  val_kl=13.01  ✓
+  ep  20  recon=119.61  kl=12.46  val_recon=120.30  val_kl=12.56  ✓
+  ep  30  recon=90.04  kl=12.65  val_recon=93.27  val_kl=13.14  ✓
+  ep  40  recon=74.64  kl=12.70  val_recon=76.65  val_kl=12.92  
+  Early Stop at ep 43
+  완료 — 2.1분  저장: checkpoints_beta/beta_4.0.pt
+
+모든 β 학습 완료.
+
+[cell 12]
+<Figure size 1200x400 with 2 Axes>
+
+[cell 12]
+beta     val_recon      val_kl
+----------------------------------
+   0.5         37.40       36.29
+   1.0         42.46       26.03
+   2.0         58.15       18.34
+   4.0         80.77       12.62
+
+[cell 14]
+<Figure size 600x750 with 20 Axes>
+
+[cell 16]
+<Figure size 900x600 with 24 Axes>
+
+[cell 18]
+<Figure size 1200x400 with 2 Axes>
+
+[cell 18]
+β       μ std      σ mean
+--------------------------------
+   0.5      0.4146      0.8633
+   1.0      0.3600      0.9000
+   2.0      0.3097      0.9250
+   4.0      0.2798      0.9416
+
+[cell 20]
+β=1.0 모델 저장 완료 → checkpoints_beta
