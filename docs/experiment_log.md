@@ -356,7 +356,7 @@ hair 예외: gender 없이 `adult`/`child` 등 연령 타입 사용
 |---------|---------|------|
 | arms | 4 | armour, bracers, hands, wrists |
 | feet | 8 | boots, shoes, sandals, slippers, socks, armour, hoofs, accessory |
-| hair | 40+ | afro, long, braid, ponytail 등 다양 |
+| hair | 59 | afro, long, braid, ponytail 등 다양 |
 | hat | 9 | cloth, formal, helmet, headband, magic, pirate, visor 등 |
 | legs | 12 | pants, skirts, armour, hose, leggings, shorts 등 |
 | torso | 7 | clothes, armour, chainmail, jacket, bandage, aprons, waist |
@@ -371,7 +371,7 @@ hair 예외: gender 없이 `adult`/`child` 등 연령 타입 사용
 LPC 스프라이트가 동일한 64×64 RGBA로 설계되어 PIL alpha_composite로 레이어를 쌓을 수 있음.
 
 ```
-body  → hair → torso → legs → feet  (레이어 순서)
+body  → legs → feet → torso → hair  (레이어 순서)
 ```
 
 - 추가 학습 없이 즉시 구현 가능
@@ -392,14 +392,16 @@ body는 기존 `checkpoints_cvae_pl_pt/` 모델 사용.
 | 항목 | 값 |
 |------|-----|
 | 대상 카테고리 | torso, legs, feet, hair |
-| 총 클래스 | 86 |
-| 총 파일 | ~906,787 |
+| 총 클래스 | 86 (torso 7 + legs 12 + feet 8 + hair 59) |
+| 총 파일 | ~906,787 (원본 기준) |
+| max_per_class | 2000 (클래스 불균형 완화 위해 클래스당 최대 샘플 수 제한) |
 | latent_dim | 128 |
 | base_channels | 32 |
 | β | 1.5 |
 | epochs | 100 |
 | batch_size | 128 |
 | lr | 1e-3 (CosineAnnealing) |
+| patience | 10 (early stopping) |
 | 체크포인트 | `checkpoints_cvae_layer_pt/` (git 추적) |
 
 ### 레이블 구조

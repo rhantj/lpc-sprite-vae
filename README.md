@@ -51,10 +51,10 @@ dataset/
     │   └── ...         # chainmail, jacket, bandage, aprons, waist
     ├── legs/           # pants, skirts, armour, hose, leggings ...
     ├── feet/           # boots, shoes, sandals, socks ...
-    ├── hair/           # long, afro, braid, ponytail ... (40+ 종)
+    ├── hair/           # long, afro, braid, ponytail ... (59 종)
     ├── hat/            # cloth, helmet, formal, headband ...
     ├── wings/          # 100,264 (단일 키워드, flat)
-    ├── tail/           # 93,593 (단일 키워드, flat)
+    ├── tail/           # 93,590 (단일 키워드, flat)
     └── ...             # 총 26개 카테고리
 ```
 
