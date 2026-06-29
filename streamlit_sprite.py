@@ -1,3 +1,5 @@
+import base64
+import io
 import json
 from pathlib import Path
 
@@ -130,6 +132,12 @@ def arr_to_pil(arr: np.ndarray, size: int = 128) -> Image.Image:
     return img.resize((size, size), Image.NEAREST)
 
 
+def pil_to_uri(img: Image.Image) -> str:
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
 # ── App ──────────────────────────────────────────────────────
 
 st.set_page_config(page_title="캐릭터 생성", layout="wide",
@@ -183,7 +191,7 @@ div[data-baseweb="select"]:hover>div{ border-color:var(--line-strong)!important;
 ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!important; }
 
 /* 버튼 = 황금 각인 */
-.stButton>button{
+.stButton>button, [data-testid="stDownloadButton"]>button{
   background:linear-gradient(180deg,#d6ac52,#7d5e26);
   color:#1a0d04!important;
   font-family:'Cinzel',serif; font-weight:700; letter-spacing:0.22em;
@@ -192,7 +200,7 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
   box-shadow:0 0 18px rgba(217,178,90,0.40), inset 0 1px 0 rgba(255,255,255,0.35);
   transition:all .15s ease;
 }
-.stButton>button:hover{
+.stButton>button:hover, [data-testid="stDownloadButton"]>button:hover{
   background:linear-gradient(180deg,#f0cf80,#9a7430);
   box-shadow:0 0 26px rgba(242,217,138,0.6), inset 0 1px 0 rgba(255,255,255,0.45);
 }
@@ -202,6 +210,18 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
   border:1px solid var(--line);
   box-shadow:0 0 28px rgba(0,0,0,0.65);
   background:radial-gradient(circle at 50% 42%, rgba(96,22,22,0.45), rgba(0,0,0,0.9));
+}
+
+/* 중앙 캐릭터 무대 — 반응형 + 가운데 정렬 */
+.char-stage{ display:flex; justify-content:center; align-items:center; width:100%; }
+.char-img{
+  width:clamp(240px, 34vw, 520px);
+  aspect-ratio:1 / 1;
+  image-rendering:pixelated;
+  display:block; margin:0 auto;
+  border:1px solid var(--line);
+  box-shadow:0 0 32px rgba(0,0,0,0.7);
+  background:radial-gradient(circle at 50% 42%, rgba(96,22,22,0.45), rgba(0,0,0,0.92));
 }
 
 /* 번호 섹션 라벨 */
@@ -320,9 +340,23 @@ result = composite([sprites[cat] for cat in LAYER_ORDER])
 col_char, col_lore = st.columns([1.4, 1])
 
 with col_char:
-    cc = st.columns([1, 2, 1])
-    with cc[1]:
-        st.image(result.resize((320, 320), Image.NEAREST), use_container_width=True)
+    st.markdown(
+        f'<div class="char-stage"><img class="char-img" '
+        f'src="{pil_to_uri(result)}" alt="character" /></div>',
+        unsafe_allow_html=True,
+    )
+
+    dl_buf = io.BytesIO()
+    result.resize((512, 512), Image.NEAREST).save(dl_buf, format="PNG")
+    dc = st.columns([1, 2, 1])
+    with dc[1]:
+        st.download_button(
+            "⬇  이미지 다운로드",
+            data=dl_buf.getvalue(),
+            file_name="character.png",
+            mime="image/png",
+            use_container_width=True,
+        )
 
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
     st.markdown('<div class="sec-t" style="text-align:center;">레이어 구성</div>',
