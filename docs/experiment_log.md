@@ -305,7 +305,7 @@ VAE 인코더·디코더 모두에 action 레이블(one-hot)을 concat해 조건
 | RGBA→RGB | 흰 배경 합성 (rgb×α + 1×(1-α)) |
 | epochs | 50 (파인튜닝) |
 | lr | 1e-4 (기존 1e-3보다 낮게) |
-| lambda_perc | 0.00005 (to_vgg_scaled 기준) |
+| lambda_perc | 1.0 (to_vgg_scaled 스케일에 맞춰 조정 — TF의 0.05와 동등) |
 
 ### 전처리 방식 비교
 
@@ -322,7 +322,7 @@ PyTorch 09-1은 `to_vgg_scaled` 사용. TF와 동일한 스케일로 perceptual 
 |--------|------|------|
 | 0.05 | to_vgg | MSE 대비 0.6%, 시각적 차이 없음 |
 | 0.5 | to_vgg | MSE 대비 6%, 시각적 차이 없음 |
-| 0.00005 | to_vgg_scaled | TF 0.05와 동등한 실효 기여 |
+| 1.0 | to_vgg_scaled | TF 0.05와 동등한 실효 기여 (최종 적용) |
 
 ### 최종 선택: PyTorch 09-1 (checkpoints_cvae_pl_pt/)
 
