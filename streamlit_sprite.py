@@ -215,7 +215,7 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
 /* 중앙 캐릭터 무대 — 반응형 + 가운데 정렬 */
 .char-stage{ display:flex; justify-content:center; align-items:center; width:100%; }
 .char-img{
-  width:clamp(240px, 34vw, 520px);
+  width:clamp(190px, 22vw, 360px);
   aspect-ratio:1 / 1;
   image-rendering:pixelated;
   display:block; margin:0 auto;
@@ -358,19 +358,6 @@ with col_char:
             use_container_width=True,
         )
 
-    st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
-    st.markdown('<div class="sec-t" style="text-align:center;">레이어 구성</div>',
-                unsafe_allow_html=True)
-    cols = st.columns(len(LAYER_ORDER))
-    for i, cat in enumerate(LAYER_ORDER):
-        with cols[i]:
-            st.image(arr_to_pil(sprites[cat], 96), use_container_width=True)
-            st.markdown(
-                f'<div style="text-align:center;color:var(--muted);'
-                f'font-size:0.8rem;letter-spacing:0.05em;">{CATEGORY_KR[cat]}</div>',
-                unsafe_allow_html=True,
-            )
-
 with col_lore:
     choice = st.session_state.get("choice", {})
     rows = "".join(
@@ -384,3 +371,16 @@ with col_lore:
         f'{rows}</div>',
         unsafe_allow_html=True,
     )
+
+    st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="sec-t" style="text-align:center;">레이어 구성</div>',
+                unsafe_allow_html=True)
+    cols = st.columns(len(LAYER_ORDER))
+    for i, cat in enumerate(LAYER_ORDER):
+        with cols[i]:
+            st.image(arr_to_pil(sprites[cat], 96), use_container_width=True)
+            st.markdown(
+                f'<div style="text-align:center;color:var(--muted);'
+                f'font-size:0.8rem;letter-spacing:0.05em;">{CATEGORY_KR[cat]}</div>',
+                unsafe_allow_html=True,
+            )
