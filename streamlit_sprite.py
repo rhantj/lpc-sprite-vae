@@ -157,7 +157,7 @@ THEME_CSS = """
   content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
   background:radial-gradient(85% 75% at 50% 42%, transparent 52%, rgba(0,0,0,0.72) 100%);
 }
-.block-container{ position:relative; z-index:1; padding-top:2.2rem; }
+.block-container{ position:relative; z-index:1; padding-top:4.5rem; }
 
 /* 제목/소제목 */
 h1,h2,h3,h4{
