@@ -358,49 +358,75 @@ def section_label(num: int, text: str) -> None:
     )
 
 
+def layer_row(num: int, label: str, key: str, options: list[str]):
+    """셀렉트박스 + 잠금 체크박스 한 줄. (선택 키워드, 잠금 여부) 반환."""
+    section_label(num, label)
+    sel_col, lock_col = st.columns([4, 1])
+    with sel_col:
+        choice = st.selectbox(key, options, format_func=ko,
+                              label_visibility="collapsed")
+    with lock_col:
+        locked = st.checkbox("🔒", key=f"lock_{key}",
+                             help="잠그면 생성 시 이 레이어는 현재 이미지를 유지합니다.")
+    return choice, locked
+
+
 with st.sidebar:
     st.markdown('<div class="sec-t" style="font-size:1.2rem;">캐릭터 설정</div>',
                 unsafe_allow_html=True)
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
 
-    section_label(1, "몸 · 동작")
-    body_action = st.selectbox("body", BODY_ACTIONS, format_func=ko,
-                               label_visibility="collapsed")
-    section_label(2, "헤어")
-    hair_kw     = st.selectbox("hair", keywords("hair"), format_func=ko,
-                               label_visibility="collapsed")
-    section_label(3, "상의")
-    torso_kw    = st.selectbox("torso", keywords("torso"), format_func=ko,
-                               label_visibility="collapsed")
-    section_label(4, "하의")
-    legs_kw     = st.selectbox("legs", keywords("legs"), format_func=ko,
-                               label_visibility="collapsed")
-    section_label(5, "발")
-    feet_kw     = st.selectbox("feet", keywords("feet"), format_func=ko,
-                               label_visibility="collapsed")
+    body_action, lock_body  = layer_row(1, "몸 · 동작", "body",  BODY_ACTIONS)
+    hair_kw,     lock_hair  = layer_row(2, "헤어",      "hair",  keywords("hair"))
+    torso_kw,    lock_torso = layer_row(3, "상의",      "torso", keywords("torso"))
+    legs_kw,     lock_legs  = layer_row(4, "하의",      "legs",  keywords("legs"))
+    feet_kw,     lock_feet  = layer_row(5, "발",        "feet",  keywords("feet"))
 
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
     generate_btn = st.button("⚔  생성", use_container_width=True)
 
 # 생성 버튼 처리 (활성 탭과 무관하게 매 rerun 실행)
-if generate_btn:
-    body_idx  = BODY_ACTIONS.index(body_action)
-    hair_idx  = label_map[f"hair_{hair_kw}"]
-    torso_idx = label_map[f"torso_{torso_kw}"]
-    legs_idx  = label_map[f"legs_{legs_kw}"]
-    feet_idx  = label_map[f"feet_{feet_kw}"]
+CHOICE_LABEL = {"body": "몸 · 동작", "hair": "헤어", "torso": "상의",
+                "legs": "하의", "feet": "발"}
 
-    st.session_state["sprites"] = {
-        "body":  generate_layer(body_model,  body_idx,  body_cfg["num_classes"],  body_cfg["latent_dim"]),
-        "hair":  generate_layer(layer_model, hair_idx,  layer_cfg["num_classes"], layer_cfg["latent_dim"]),
-        "torso": generate_layer(layer_model, torso_idx, layer_cfg["num_classes"], layer_cfg["latent_dim"]),
-        "legs":  generate_layer(layer_model, legs_idx,  layer_cfg["num_classes"], layer_cfg["latent_dim"]),
-        "feet":  generate_layer(layer_model, feet_idx,  layer_cfg["num_classes"], layer_cfg["latent_dim"]),
+if generate_btn:
+    idx = {
+        "body":  BODY_ACTIONS.index(body_action),
+        "hair":  label_map[f"hair_{hair_kw}"],
+        "torso": label_map[f"torso_{torso_kw}"],
+        "legs":  label_map[f"legs_{legs_kw}"],
+        "feet":  label_map[f"feet_{feet_kw}"],
     }
-    st.session_state["choice"]  = {
-        "몸 · 동작": ko(body_action), "헤어": ko(hair_kw), "상의": ko(torso_kw),
-        "하의": ko(legs_kw), "발": ko(feet_kw),
-    }
+    kw = {"body": body_action, "hair": hair_kw, "torso": torso_kw,
+          "legs": legs_kw, "feet": feet_kw}
+    locks = {"body": lock_body, "hair": lock_hair, "torso": lock_torso,
+             "legs": lock_legs, "feet": lock_feet}
+
+    def gen_one(cat: str) -> np.ndarray:
+        if cat == "body":
+            return generate_layer(body_model, idx[cat],
+                                  body_cfg["num_classes"], body_cfg["latent_dim"])
+        return generate_layer(layer_model, idx[cat],
+                              layer_cfg["num_classes"], layer_cfg["latent_dim"])
+
+    prev_sprites = st.session_state.get("sprites", {})
+    prev_choice  = st.session_state.get("choice", {})
+
+    sprites, choice, locked_labels = {}, {}, []
+    for cat in LAYER_ORDER:
+        clabel = CHOICE_LABEL[cat]
+        # A 방식: 잠긴 레이어는 이전 이미지를 유지(키워드 변경 무시)
+        if locks[cat] and cat in prev_sprites:
+            sprites[cat] = prev_sprites[cat]
+            choice[clabel] = prev_choice.get(clabel, ko(kw[cat]))
+            locked_labels.append(clabel)
+        else:
+            sprites[cat] = gen_one(cat)
+            choice[clabel] = ko(kw[cat])
+
+    st.session_state["sprites"] = sprites
+    st.session_state["choice"]  = choice
+    st.session_state["locked"]  = locked_labels
 
 
 # ── Tab renderers ─────────────────────────────────────────────
@@ -441,8 +467,10 @@ def render_generation() -> None:
 
     with col_lore:
         choice = st.session_state.get("choice", {})
+        locked = set(st.session_state.get("locked", []))
         rows = "".join(
-            f'<div class="row"><span class="k">{k}</span><span class="v">{v}</span></div>'
+            f'<div class="row"><span class="k">{k}</span>'
+            f'<span class="v">{v}{" 🔒" if k in locked else ""}</span></div>'
             for k, v in choice.items()
         )
         st.markdown(
