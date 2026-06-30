@@ -20,6 +20,7 @@ DEVICE = torch.device("mps" if torch.backends.mps.is_available()
 
 BODY_CKPT  = Path("checkpoints_cvae_pl_pt")
 LAYER_CKPT = Path("checkpoints_cvae_layer_pt")
+ASSETS     = Path("app_assets/experiments")
 
 BODY_ACTIONS = [
     "walk", "idle", "run", "slash", "shoot",
@@ -314,6 +315,21 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
 .lore .row:last-child{ border-bottom:none; }
 .lore .row .k{ color:var(--muted); letter-spacing:0.06em; }
 .lore .row .v{ color:var(--parch); font-weight:500; }
+
+/* 탭 */
+.stTabs [data-baseweb="tab-list"]{ gap:1.4rem; border-bottom:1px solid var(--line); }
+.stTabs [data-baseweb="tab"]{
+  font-family:'Cinzel','Noto Serif KR',serif; color:var(--muted)!important;
+  letter-spacing:0.10em; font-size:1.0rem; background:transparent;
+}
+.stTabs [aria-selected="true"]{ color:var(--gold-bright)!important; }
+.stTabs [data-baseweb="tab-highlight"]{ background:var(--gold)!important; }
+.stTabs [data-baseweb="tab-border"]{ background:transparent; }
+
+/* 실험 figure 캡션 */
+.exp-cap{ color:var(--muted); font-size:0.84rem; letter-spacing:0.03em;
+  margin:0.2rem 0 1.4rem; line-height:1.5; }
+.exp-cap b{ color:var(--gold-bright); }
 </style>
 """
 st.markdown(THEME_CSS, unsafe_allow_html=True)
@@ -370,6 +386,7 @@ st.markdown('<div class="cc-title">캐릭터 생성</div>', unsafe_allow_html=Tr
 st.markdown('<div class="cc-sub">CHARACTER CREATION</div>', unsafe_allow_html=True)
 st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
 
+# 생성 버튼 처리 (활성 탭과 무관하게 매 rerun 실행)
 if generate_btn:
     body_idx  = BODY_ACTIONS.index(body_action)
     hair_idx  = label_map[f"hair_{hair_kw}"]
@@ -377,73 +394,198 @@ if generate_btn:
     legs_idx  = label_map[f"legs_{legs_kw}"]
     feet_idx  = label_map[f"feet_{feet_kw}"]
 
-    sprites = {
+    st.session_state["sprites"] = {
         "body":  generate_layer(body_model,  body_idx,  body_cfg["num_classes"],  body_cfg["latent_dim"]),
         "hair":  generate_layer(layer_model, hair_idx,  layer_cfg["num_classes"], layer_cfg["latent_dim"]),
         "torso": generate_layer(layer_model, torso_idx, layer_cfg["num_classes"], layer_cfg["latent_dim"]),
         "legs":  generate_layer(layer_model, legs_idx,  layer_cfg["num_classes"], layer_cfg["latent_dim"]),
         "feet":  generate_layer(layer_model, feet_idx,  layer_cfg["num_classes"], layer_cfg["latent_dim"]),
     }
-    st.session_state["sprites"] = sprites
     st.session_state["choice"]  = {
         "몸 · 동작": ko(body_action), "헤어": ko(hair_kw), "상의": ko(torso_kw),
         "하의": ko(legs_kw), "발": ko(feet_kw),
     }
 
-if "sprites" not in st.session_state:
-    st.info("좌측 패널에서 옵션을 선택하고 '생성'을 눌러 캐릭터를 소환하세요.")
-    st.stop()
 
-sprites = st.session_state["sprites"]
+# ── Tab renderers ─────────────────────────────────────────────
 
-# 레이어 순서대로 합성
-result = composite([sprites[cat] for cat in LAYER_ORDER])
+def render_generation() -> None:
+    if "sprites" not in st.session_state:
+        st.info("좌측 패널에서 옵션을 선택하고 '생성'을 눌러 캐릭터를 소환하세요.")
+        return
 
-# 결과 표시: 중앙 캐릭터 / 우측 설명 패널
-col_char, col_lore = st.columns([1.4, 1])
+    sprites = st.session_state["sprites"]
+    result = composite([sprites[cat] for cat in LAYER_ORDER])
 
-with col_char:
-    st.markdown(
-        f'<div class="char-stage"><img class="char-img" '
-        f'src="{pil_to_uri(crop_to_content(result))}" alt="character" /></div>',
-        unsafe_allow_html=True,
-    )
-
-    dl_buf = io.BytesIO()
-    result.resize((512, 512), Image.NEAREST).save(dl_buf, format="PNG")
-    dc = st.columns([1, 2, 1])
-    with dc[1]:
-        st.download_button(
-            "⬇  이미지 다운로드",
-            data=dl_buf.getvalue(),
-            file_name="character.png",
-            mime="image/png",
-            use_container_width=True,
+    col_char, col_lore = st.columns([1.4, 1])
+    with col_char:
+        st.markdown(
+            f'<div class="char-stage"><img class="char-img" '
+            f'src="{pil_to_uri(crop_to_content(result))}" alt="character" /></div>',
+            unsafe_allow_html=True,
         )
+        dl_buf = io.BytesIO()
+        result.resize((512, 512), Image.NEAREST).save(dl_buf, format="PNG")
+        dc = st.columns([1, 2, 1])
+        with dc[1]:
+            st.download_button(
+                "⬇  이미지 다운로드",
+                data=dl_buf.getvalue(),
+                file_name="character.png",
+                mime="image/png",
+                use_container_width=True,
+            )
 
-with col_lore:
-    choice = st.session_state.get("choice", {})
+    with col_lore:
+        choice = st.session_state.get("choice", {})
+        rows = "".join(
+            f'<div class="row"><span class="k">{k}</span><span class="v">{v}</span></div>'
+            for k, v in choice.items()
+        )
+        st.markdown(
+            f'<div class="lore"><h4>소환된 캐릭터</h4>'
+            f'<div style="color:var(--muted);font-size:0.86rem;margin-bottom:0.8rem;">'
+            f'CVAE + Perceptual Loss로 생성된 5개 레이어를 알파 합성한 결과입니다.</div>'
+            f'{rows}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sec-t" style="text-align:center;">레이어 구성</div>',
+                    unsafe_allow_html=True)
+        cols = st.columns(len(LAYER_ORDER))
+        for i, cat in enumerate(LAYER_ORDER):
+            with cols[i]:
+                st.image(arr_to_pil(sprites[cat], 96), use_container_width=True)
+                st.markdown(
+                    f'<div style="text-align:center;color:var(--muted);'
+                    f'font-size:0.8rem;letter-spacing:0.05em;">{CATEGORY_KR[cat]}</div>',
+                    unsafe_allow_html=True,
+                )
+
+
+def _kv_panel(title: str, items: list[tuple[str, str]]) -> str:
     rows = "".join(
         f'<div class="row"><span class="k">{k}</span><span class="v">{v}</span></div>'
-        for k, v in choice.items()
+        for k, v in items
     )
+    return f'<div class="lore"><h4>{title}</h4>{rows}</div>'
+
+
+def render_architecture() -> None:
     st.markdown(
-        f'<div class="lore"><h4>소환된 캐릭터</h4>'
-        f'<div style="color:var(--muted);font-size:0.86rem;margin-bottom:0.8rem;">'
-        f'CVAE + Perceptual Loss로 생성된 5개 레이어를 알파 합성한 결과입니다.</div>'
-        f'{rows}</div>',
+        '<div class="lore" style="margin-bottom:1.2rem;"><h4>조건부 변분 오토인코더 (CVAE)</h4>'
+        '<div style="color:var(--parch);font-size:0.92rem;line-height:1.65;">'
+        '입력 스프라이트와 <b style="color:var(--gold-bright);">레이블(one-hot)</b>을 함께 인코딩해 '
+        '잠재변수 z의 분포를 추정하고, z와 레이블을 다시 디코딩해 64×64 RGBA 스프라이트를 복원합니다. '
+        '생성 시에는 z ~ N(0,I)를 샘플링하고 원하는 레이블을 주입해 <b style="color:var(--gold-bright);">'
+        '원본 없이 순수 생성</b>합니다.</div></div>',
         unsafe_allow_html=True,
     )
 
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown(_kv_panel("Encoder", [
+            ("입력", "64×64×4 (RGBA) + label"),
+            ("Conv ×4", "stride 2 · 4→32→64→128→256"),
+            ("정규화", "BatchNorm + LeakyReLU(0.2)"),
+            ("출력", "flatten ⊕ label → μ, logσ² (128-d)"),
+        ]), unsafe_allow_html=True)
+    with c2:
+        st.markdown(_kv_panel("Decoder", [
+            ("입력", "z(128) ⊕ label"),
+            ("FC", "→ 256×4×4 reshape"),
+            ("ConvT ×4", "stride 2 · 256→128→64→32→4"),
+            ("출력", "64×64×4, Sigmoid"),
+        ]), unsafe_allow_html=True)
+
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
-    st.markdown('<div class="sec-t" style="text-align:center;">레이어 구성</div>',
-                unsafe_allow_html=True)
-    cols = st.columns(len(LAYER_ORDER))
-    for i, cat in enumerate(LAYER_ORDER):
-        with cols[i]:
-            st.image(arr_to_pil(sprites[cat], 96), use_container_width=True)
-            st.markdown(
-                f'<div style="text-align:center;color:var(--muted);'
-                f'font-size:0.8rem;letter-spacing:0.05em;">{CATEGORY_KR[cat]}</div>',
-                unsafe_allow_html=True,
-            )
+
+    c3, c4 = st.columns(2)
+    with c3:
+        st.markdown(_kv_panel("Body 모델 (CVAE + Perceptual Loss)", [
+            ("latent_dim", "128"),
+            ("num_classes", "10 (동작)"),
+            ("β (KL 가중치)", "1.5"),
+            ("λ_perc (VGG)", "1.0"),
+            ("epochs / batch", "50 / 128"),
+            ("learning rate", "1e-4"),
+        ]), unsafe_allow_html=True)
+    with c4:
+        st.markdown(_kv_panel("Layer 모델 (단일 CVAE)", [
+            ("latent_dim", "128"),
+            ("num_classes", "86 (torso·legs·feet·hair)"),
+            ("β (KL 가중치)", "1.5"),
+            ("max_per_class", "2000"),
+            ("epochs / batch", "100 / 128"),
+            ("learning rate", "1e-3"),
+        ]), unsafe_allow_html=True)
+
+    st.markdown(
+        '<div class="lore" style="margin-top:1.2rem;"><h4>손실 함수</h4>'
+        '<div class="row"><span class="k">L (전체)</span><span class="v">Recon + β·KL ( + λ·Perceptual )</span></div>'
+        '<div class="row"><span class="k">Recon</span><span class="v">입력과 복원 이미지의 픽셀 차이</span></div>'
+        '<div class="row"><span class="k">KL</span><span class="v">잠재분포를 prior N(0,I)에 맞추는 정규화</span></div>'
+        '<div class="row"><span class="k">Perceptual</span><span class="v">VGG16 feature 차이 (body 모델 한정)</span></div>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def exp_figure(file: str, caption_html: str) -> None:
+    path = ASSETS / file
+    if not path.exists():
+        st.warning(f"이미지 없음: {file}")
+        return
+    st.image(str(path), use_container_width=True)
+    st.markdown(f'<div class="exp-cap">{caption_html}</div>', unsafe_allow_html=True)
+
+
+def render_experiments() -> None:
+    section_label(1, "데이터셋 · 증강")
+    c = st.columns(2)
+    with c[0]:
+        exp_figure("dataset.png", "LPC 스프라이트 <b>카테고리 분포</b> — 26개 카테고리, 클래스 불균형 확인")
+    with c[1]:
+        exp_figure("augment.png", "body <b>좌우반전 증강</b> — 상단 원본 / 하단 반전 (2배 확장)")
+
+    section_label(2, "VAE 재구성 · β-VAE 실험")
+    c = st.columns(2)
+    with c[0]:
+        exp_figure("vae_recon.png", "VAE <b>재구성 결과</b> (PyTorch) — 상단 원본 / 하단 복원")
+    with c[1]:
+        exp_figure("beta_vae.png", "<b>β별 학습 곡선</b> — β=0.5~4.0 비교, body는 β=1.0이 최적 복원")
+
+    section_label(3, "잠재공간 시각화")
+    c = st.columns(2)
+    with c[0]:
+        exp_figure("latent_vae.png", "VAE <b>잠재공간</b> (PCA/t-SNE) — 동작별 군집")
+    with c[1]:
+        exp_figure("latent_cvae.png", "CVAE <b>잠재공간</b> — 레이블 조건부로 더 구조화된 분포")
+
+    section_label(4, "Latent Arithmetic · 조건부 생성")
+    c = st.columns(2)
+    with c[0]:
+        exp_figure("latent_arithmetic.png", "<b>잠재공간 산술</b> — z 보간으로 부드러운 속성 변화")
+    with c[1]:
+        exp_figure("cvae_gen.png", "CVAE <b>조건부 생성</b> — 레이블별 샘플 (z ~ N(0,I))")
+
+    section_label(5, "레이어 CVAE (86 클래스)")
+    c = st.columns(3)
+    with c[0]:
+        exp_figure("layer_training.png", "<b>학습 곡선</b> — 100 epoch")
+    with c[1]:
+        exp_figure("layer_recon.png", "<b>재구성</b> 결과")
+    with c[2]:
+        exp_figure("layer_cond.png", "<b>조건부 생성</b> 결과")
+
+
+# ── Tabs ──────────────────────────────────────────────────────
+
+tab_gen, tab_arch, tab_exp = st.tabs(["⚔  캐릭터 생성", "🏛  모델 구조", "📜  실험 결과"])
+
+with tab_gen:
+    render_generation()
+with tab_arch:
+    render_architecture()
+with tab_exp:
+    render_experiments()
