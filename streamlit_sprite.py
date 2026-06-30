@@ -382,10 +382,6 @@ with st.sidebar:
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
     generate_btn = st.button("⚔  생성", use_container_width=True)
 
-st.markdown('<div class="cc-title">캐릭터 생성</div>', unsafe_allow_html=True)
-st.markdown('<div class="cc-sub">CHARACTER CREATION</div>', unsafe_allow_html=True)
-st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
-
 # 생성 버튼 처리 (활성 탭과 무관하게 매 rerun 실행)
 if generate_btn:
     body_idx  = BODY_ACTIONS.index(body_action)
@@ -409,7 +405,14 @@ if generate_btn:
 
 # ── Tab renderers ─────────────────────────────────────────────
 
+def tab_header(title: str, subtitle: str) -> None:
+    st.markdown(f'<div class="cc-title">{title}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="cc-sub">{subtitle}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
+
+
 def render_generation() -> None:
+    tab_header("캐릭터 생성", "CHARACTER CREATION")
     if "sprites" not in st.session_state:
         st.info("좌측 패널에서 옵션을 선택하고 '생성'을 눌러 캐릭터를 소환하세요.")
         return
@@ -472,6 +475,7 @@ def _kv_panel(title: str, items: list[tuple[str, str]]) -> str:
 
 
 def render_architecture() -> None:
+    tab_header("모델 구조", "MODEL ARCHITECTURE")
     st.markdown(
         '<div class="lore" style="margin-bottom:1.2rem;"><h4>조건부 변분 오토인코더 (CVAE)</h4>'
         '<div style="color:var(--parch);font-size:0.92rem;line-height:1.65;">'
@@ -541,6 +545,8 @@ def exp_figure(file: str, caption_html: str) -> None:
 
 
 def render_experiments() -> None:
+    tab_header("실험 결과", "EXPERIMENT RESULTS")
+
     section_label(1, "데이터셋 · 증강")
     c = st.columns(2)
     with c[0]:
@@ -555,24 +561,31 @@ def render_experiments() -> None:
     with c[1]:
         exp_figure("beta_vae.png", "<b>β별 학습 곡선</b> — β=0.5~4.0 비교, body는 β=1.0이 최적 복원")
 
-    section_label(3, "잠재공간 시각화")
+    section_label(3, "학습 Loss 분석")
+    c = st.columns(2)
+    with c[0]:
+        exp_figure("vae_loss.png", "VAE <b>학습 곡선</b> — Total / Recon(MSE) / KL Divergence (50 epoch)")
+    with c[1]:
+        exp_figure("cvae_loss.png", "CVAE <b>학습 곡선</b> — Total Loss, Recon vs KL 균형 (100 epoch)")
+
+    section_label(4, "잠재공간 시각화")
     c = st.columns(2)
     with c[0]:
         exp_figure("latent_vae.png", "VAE <b>잠재공간</b> (PCA/t-SNE) — 동작별 군집")
     with c[1]:
         exp_figure("latent_cvae.png", "CVAE <b>잠재공간</b> — 레이블 조건부로 더 구조화된 분포")
 
-    section_label(4, "Latent Arithmetic · Interpolation")
+    section_label(5, "Latent Arithmetic · Interpolation")
     c = st.columns(2)
     with c[0]:
         exp_figure("latent_arithmetic.png", "<b>벡터 산술 (A−B+C)</b> — 잠재 벡터 연산으로 속성 조합")
     with c[1]:
         exp_figure("latent_interp.png", "<b>잠재공간 보간</b> — 방향 벡터를 따라 α=−2→+2로 스윕하며 속성이 연속 변화")
 
-    section_label(5, "CVAE 조건부 생성")
+    section_label(6, "CVAE 조건부 생성")
     exp_figure("cvae_gen.png", "CVAE <b>조건부 생성</b> — 레이블별 샘플 (z ~ N(0,I))")
 
-    section_label(6, "레이어 CVAE (86 클래스)")
+    section_label(7, "레이어 CVAE (86 클래스)")
     c = st.columns(3)
     with c[0]:
         exp_figure("layer_training.png", "<b>학습 곡선</b> — 100 epoch")
