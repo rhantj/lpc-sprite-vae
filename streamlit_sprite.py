@@ -562,14 +562,17 @@ def render_experiments() -> None:
     with c[1]:
         exp_figure("latent_cvae.png", "CVAE <b>잠재공간</b> — 레이블 조건부로 더 구조화된 분포")
 
-    section_label(4, "Latent Arithmetic · 조건부 생성")
+    section_label(4, "Latent Arithmetic · Interpolation")
     c = st.columns(2)
     with c[0]:
-        exp_figure("latent_arithmetic.png", "<b>잠재공간 산술</b> — z 보간으로 부드러운 속성 변화")
+        exp_figure("latent_arithmetic.png", "<b>벡터 산술 (A−B+C)</b> — 잠재 벡터 연산으로 속성 조합")
     with c[1]:
-        exp_figure("cvae_gen.png", "CVAE <b>조건부 생성</b> — 레이블별 샘플 (z ~ N(0,I))")
+        exp_figure("latent_interp.png", "<b>잠재공간 보간</b> — 방향 벡터를 따라 α=−2→+2로 스윕하며 속성이 연속 변화")
 
-    section_label(5, "레이어 CVAE (86 클래스)")
+    section_label(5, "CVAE 조건부 생성")
+    exp_figure("cvae_gen.png", "CVAE <b>조건부 생성</b> — 레이블별 샘플 (z ~ N(0,I))")
+
+    section_label(6, "레이어 CVAE (86 클래스)")
     c = st.columns(3)
     with c[0]:
         exp_figure("layer_training.png", "<b>학습 곡선</b> — 100 epoch")
