@@ -277,7 +277,7 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
 /* 중앙 캐릭터 무대 — 반응형 + 가운데 정렬 */
 .char-stage{ display:flex; justify-content:center; align-items:center; width:100%; }
 .char-img{
-  width:clamp(480px, 56vw, 920px);
+  width:clamp(190px, 22vw, 360px);
   aspect-ratio:1 / 1;
   image-rendering:pixelated;
   display:block; margin:0 auto;
