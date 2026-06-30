@@ -368,7 +368,8 @@ def section_label(num: int, text: str) -> None:
     )
 
 
-def layer_row(num: int, label: str, key: str, options: list[str]):
+def layer_row(num: int, label: str, key: str, options: list[str],
+              lock_enabled: bool):
     """셀렉트박스 + 잠금 체크박스 한 줄. (선택 키워드, 잠금 여부) 반환."""
     section_label(num, label)
     sel_col, lock_col = st.columns([4, 1])
@@ -376,9 +377,11 @@ def layer_row(num: int, label: str, key: str, options: list[str]):
         choice = st.selectbox(key, options, format_func=ko,
                               label_visibility="collapsed")
     with lock_col:
+        help_txt = ("잠그면 생성 시 이 레이어는 현재 이미지를 유지합니다."
+                    if lock_enabled else "먼저 캐릭터를 한 번 생성하면 잠금을 쓸 수 있습니다.")
         locked = st.checkbox("🔒", key=f"lock_{key}",
-                             help="잠그면 생성 시 이 레이어는 현재 이미지를 유지합니다.")
-    return choice, locked
+                             disabled=not lock_enabled, help=help_txt)
+    return choice, locked and lock_enabled
 
 
 with st.sidebar:
@@ -386,11 +389,17 @@ with st.sidebar:
                 unsafe_allow_html=True)
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
 
-    body_action, lock_body  = layer_row(1, "몸 · 동작", "body",  BODY_ACTIONS)
-    hair_kw,     lock_hair  = layer_row(2, "헤어",      "hair",  keywords("hair"))
-    torso_kw,    lock_torso = layer_row(3, "상의",      "torso", keywords("torso"))
-    legs_kw,     lock_legs  = layer_row(4, "하의",      "legs",  keywords("legs"))
-    feet_kw,     lock_feet  = layer_row(5, "발",        "feet",  keywords("feet"))
+    # 잠금은 최초 1회 생성 이후부터 활성화
+    lock_enabled = "sprites" in st.session_state
+
+    body_action, lock_body  = layer_row(1, "몸 · 동작", "body",  BODY_ACTIONS, lock_enabled)
+    hair_kw,     lock_hair  = layer_row(2, "헤어",      "hair",  keywords("hair"), lock_enabled)
+    torso_kw,    lock_torso = layer_row(3, "상의",      "torso", keywords("torso"), lock_enabled)
+    legs_kw,     lock_legs  = layer_row(4, "하의",      "legs",  keywords("legs"), lock_enabled)
+    feet_kw,     lock_feet  = layer_row(5, "발",        "feet",  keywords("feet"), lock_enabled)
+
+    if not lock_enabled:
+        st.caption("🔒 잠금은 첫 생성 이후 사용할 수 있습니다.")
 
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
     generate_btn = st.button("⚔  생성", use_container_width=True)
@@ -620,10 +629,10 @@ def render_experiments() -> None:
     with c[1]:
         exp_figure("cvae_loss.png", "CVAE <b>학습 곡선</b> — Total Loss, Recon vs KL 균형 (100 epoch)")
     metric_table(
-        ["모델 (최종 epoch)", "Total (train)", "Total (val)", "Recon", "KL"],
-        [["VAE (PyTorch)", "64.70", "70.48", "—", "—"],
-         ["CVAE (PyTorch, β=1.5)", "66.30", "71.44", "38.44", "18.57"]],
-        note="L = Recon + β·KL. CVAE: 38.44 + 1.5×18.57 ≈ 66.30 (β=1.5 확인).")
+        ["모델 (최종 epoch)", "Total (train)", "Total (val)"],
+        [["VAE (PyTorch)", "64.70", "70.48"],
+         ["CVAE (PyTorch, β=1.5)", "66.30", "71.44"]],
+        note="CVAE 분해(train): Recon 38.44 + β·KL(1.5×18.57) ≈ 66.30 (β=1.5 확인).")
 
     section_label(4, "잠재공간 시각화")
     c = st.columns(2)
@@ -651,12 +660,14 @@ def render_experiments() -> None:
     with c[2]:
         exp_figure("layer_cond.png", "<b>조건부 생성</b> 결과")
     metric_table(
-        ["지표 (최종 epoch)", "Train", "Val"],
-        [["Total Loss (L)", "37.30", "39.35"],
-         ["Reconstruction", "21.40", "—"],
-         ["KL Divergence", "10.60", "—"]],
+        ["지표 (최종 epoch)", "값"],
+        [["Total Loss · train", "37.30"],
+         ["Total Loss · val", "39.35"],
+         ["Reconstruction (train)", "21.40"],
+         ["KL Divergence (train)", "10.60"]],
         best=0,
-        note="86 클래스(torso 7 + legs 12 + feet 8 + hair 59) 단일 CVAE · β=1.5 · 100 epoch.")
+        note="86 클래스(torso 7 + legs 12 + feet 8 + hair 59) 단일 CVAE · β=1.5 · 100 epoch. "
+             "L = Recon + β·KL = 21.40 + 1.5×10.60 ≈ 37.30.")
 
 
 # ── Tabs ──────────────────────────────────────────────────────
