@@ -330,6 +330,16 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
 .exp-cap{ color:var(--muted); font-size:0.84rem; letter-spacing:0.03em;
   margin:0.2rem 0 1.4rem; line-height:1.5; }
 .exp-cap b{ color:var(--gold-bright); }
+
+/* 실험 결과 표 */
+.exp-table{ width:100%; border-collapse:collapse; margin:0.2rem 0 0.6rem; font-size:0.9rem; }
+.exp-table th{ color:var(--gold-bright); text-align:left; font-family:'Cinzel','Noto Serif KR',serif;
+  font-weight:600; font-size:0.8rem; letter-spacing:0.05em; padding:0.5rem 0.8rem;
+  border-bottom:1px solid var(--line); }
+.exp-table td{ color:var(--parch); padding:0.5rem 0.8rem;
+  border-bottom:1px solid rgba(217,178,90,0.15); }
+.exp-table tr.best td{ background:rgba(217,178,90,0.08); color:var(--gold-bright); font-weight:600; }
+.exp-note{ color:var(--muted); font-size:0.82rem; margin:0 0 1.4rem; font-style:italic; }
 </style>
 """
 st.markdown(THEME_CSS, unsafe_allow_html=True)
@@ -572,6 +582,20 @@ def exp_figure(file: str, caption_html: str) -> None:
     st.markdown(f'<div class="exp-cap">{caption_html}</div>', unsafe_allow_html=True)
 
 
+def metric_table(headers: list[str], rows: list[list[str]],
+                 best: int | None = None, note: str = "") -> None:
+    th = "".join(f"<th>{h}</th>" for h in headers)
+    trs = ""
+    for i, r in enumerate(rows):
+        cls = ' class="best"' if best == i else ""
+        trs += f"<tr{cls}>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>"
+    html = (f'<table class="exp-table"><thead><tr>{th}</tr></thead>'
+            f'<tbody>{trs}</tbody></table>')
+    if note:
+        html += f'<div class="exp-note">{note}</div>'
+    st.markdown(html, unsafe_allow_html=True)
+
+
 def render_experiments() -> None:
     tab_header("실험 결과", "EXPERIMENT RESULTS")
 
@@ -595,6 +619,11 @@ def render_experiments() -> None:
         exp_figure("vae_loss.png", "VAE <b>학습 곡선</b> — Total / Recon(MSE) / KL Divergence (50 epoch)")
     with c[1]:
         exp_figure("cvae_loss.png", "CVAE <b>학습 곡선</b> — Total Loss, Recon vs KL 균형 (100 epoch)")
+    metric_table(
+        ["모델 (최종 epoch)", "Total (train)", "Total (val)", "Recon", "KL"],
+        [["VAE (PyTorch)", "64.70", "70.48", "—", "—"],
+         ["CVAE (PyTorch, β=1.5)", "66.30", "71.44", "38.44", "18.57"]],
+        note="L = Recon + β·KL. CVAE: 38.44 + 1.5×18.57 ≈ 66.30 (β=1.5 확인).")
 
     section_label(4, "잠재공간 시각화")
     c = st.columns(2)
@@ -621,6 +650,13 @@ def render_experiments() -> None:
         exp_figure("layer_recon.png", "<b>재구성</b> 결과")
     with c[2]:
         exp_figure("layer_cond.png", "<b>조건부 생성</b> 결과")
+    metric_table(
+        ["지표 (최종 epoch)", "Train", "Val"],
+        [["Total Loss (L)", "37.30", "39.35"],
+         ["Reconstruction", "21.40", "—"],
+         ["KL Divergence", "10.60", "—"]],
+        best=0,
+        note="86 클래스(torso 7 + legs 12 + feet 8 + hair 59) 단일 CVAE · β=1.5 · 100 epoch.")
 
 
 # ── Tabs ──────────────────────────────────────────────────────
