@@ -138,6 +138,21 @@ def pil_to_uri(img: Image.Image) -> str:
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
 
+def crop_to_content(img: Image.Image, pad: int = 2) -> Image.Image:
+    """투명 여백을 제거하고 정사각으로 패딩 (표시용 — 캐릭터를 프레임에 꽉 채움)."""
+    bbox = img.getbbox()
+    if not bbox:
+        return img
+    l, t, r, b = bbox
+    l = max(0, l - pad); t = max(0, t - pad)
+    r = min(img.width, r + pad); b = min(img.height, b + pad)
+    cropped = img.crop((l, t, r, b))
+    side = max(cropped.width, cropped.height)
+    square = Image.new("RGBA", (side, side), (0, 0, 0, 0))
+    square.paste(cropped, ((side - cropped.width) // 2, (side - cropped.height) // 2))
+    return square
+
+
 # ── App ──────────────────────────────────────────────────────
 
 st.set_page_config(page_title="캐릭터 생성", layout="wide",
@@ -342,7 +357,7 @@ col_char, col_lore = st.columns([1.4, 1])
 with col_char:
     st.markdown(
         f'<div class="char-stage"><img class="char-img" '
-        f'src="{pil_to_uri(result)}" alt="character" /></div>',
+        f'src="{pil_to_uri(crop_to_content(result))}" alt="character" /></div>',
         unsafe_allow_html=True,
     )
 
