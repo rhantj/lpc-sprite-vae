@@ -178,7 +178,7 @@ def pil_to_uri(img: Image.Image) -> str:
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
 
-def crop_to_content(img: Image.Image, pad: int = 1,
+def crop_to_content(img: Image.Image, pad: int = 0,
                     alpha_thresh: int = 40) -> Image.Image:
     """실제 캐릭터(알파>임계값)만 타이트하게 크롭 후 정사각 패딩.
     생성물의 흐릿한 노이즈 픽셀을 무시해 캐릭터가 프레임을 꽉 채우도록 한다."""
