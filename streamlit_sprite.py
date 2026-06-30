@@ -178,12 +178,19 @@ def pil_to_uri(img: Image.Image) -> str:
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
 
-def crop_to_content(img: Image.Image, pad: int = 2) -> Image.Image:
-    """투명 여백을 제거하고 정사각으로 패딩 (표시용 — 캐릭터를 프레임에 꽉 채움)."""
-    bbox = img.getbbox()
-    if not bbox:
-        return img
-    l, t, r, b = bbox
+def crop_to_content(img: Image.Image, pad: int = 1,
+                    alpha_thresh: int = 40) -> Image.Image:
+    """실제 캐릭터(알파>임계값)만 타이트하게 크롭 후 정사각 패딩.
+    생성물의 흐릿한 노이즈 픽셀을 무시해 캐릭터가 프레임을 꽉 채우도록 한다."""
+    alpha = np.asarray(img)[..., 3]
+    ys, xs = np.where(alpha > alpha_thresh)
+    if len(xs) == 0:                      # 임계값 통과 픽셀 없으면 원본 bbox로 폴백
+        bbox = img.getbbox()
+        if not bbox:
+            return img
+        l, t, r, b = bbox
+    else:
+        l, t, r, b = int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
     l = max(0, l - pad); t = max(0, t - pad)
     r = min(img.width, r + pad); b = min(img.height, b + pad)
     cropped = img.crop((l, t, r, b))
