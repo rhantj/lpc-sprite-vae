@@ -26,6 +26,32 @@ BODY_ACTIONS = [
     "thrust", "jump", "sit", "spellcast", "other"
 ]
 
+KO_LABELS: dict[str, str] = {
+    # 동작
+    "walk": "걷기", "idle": "대기", "run": "달리기", "slash": "베기",
+    "shoot": "사격", "thrust": "찌르기", "jump": "점프", "sit": "앉기",
+    "spellcast": "마법 시전", "other": "기타", "hurt": "피격", "combat": "전투",
+    # 헤어
+    "afro": "아프로", "balding": "대머리", "bangs": "앞머리컷",
+    "bangslong": "긴 앞머리", "bedhead": "헝클어진", "bob": "단발",
+    "bun": "번머리", "cornrows": "콘로우", "curly": "곱슬",
+    "curtains": "커튼컷", "dreadlocks": "드레드락", "flipped": "플립",
+    "flower": "꽃 장식", "french": "프렌치", "hawk": "호크",
+    "jewelry": "장신구", "long": "긴머리", "loose": "느슨한",
+    "messy": "헝클어진", "mohawk": "모히칸", "page": "페이지컷",
+    "parted": "가르마", "pixie": "픽시컷", "plain": "민머리",
+    "ponytail": "포니테일", "princess": "공주머리", "shaggy": "샤기",
+    "short": "짧은머리", "shoulder": "어깨머리", "side": "사이드컷",
+    "spiky": "뾰족머리", "straight": "생머리", "swoop": "스웹",
+    "unkempt": "흐트러진", "wavy": "웨이브", "wind": "바람머리",
+    # 상의 / 하의 / 발 — 공통 소재·종류
+    "plate": "판금", "leather": "가죽", "robe": "로브", "chain": "체인메일",
+    "shirt": "셔츠", "vest": "조끼", "cloth": "천", "scale": "비늘갑옷",
+    "overalls": "멜빵바지", "pants": "바지", "skirt": "스커트",
+    "shorts": "반바지", "boots": "부츠", "shoes": "신발",
+    "sandals": "샌들", "bare": "맨발", "slippers": "슬리퍼",
+}
+
 LAYER_ORDER = ["body", "legs", "feet", "torso", "hair"]
 
 CATEGORY_KR = {
@@ -286,6 +312,10 @@ label_map   = layer_cfg["label_map"]
 label_names = layer_cfg["label_names"]
 
 
+def ko(keyword: str) -> str:
+    return KO_LABELS.get(keyword, keyword.replace("_", " ").title())
+
+
 def keywords(cat: str) -> list[str]:
     prefix = cat + "_"
     return sorted(n[len(prefix):] for n in label_names if n.startswith(prefix))
@@ -305,15 +335,20 @@ with st.sidebar:
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
 
     section_label(1, "몸 · 동작")
-    body_action = st.selectbox("body", BODY_ACTIONS, label_visibility="collapsed")
+    body_action = st.selectbox("body", BODY_ACTIONS, format_func=ko,
+                               label_visibility="collapsed")
     section_label(2, "헤어")
-    hair_kw     = st.selectbox("hair", keywords("hair"), label_visibility="collapsed")
+    hair_kw     = st.selectbox("hair", keywords("hair"), format_func=ko,
+                               label_visibility="collapsed")
     section_label(3, "상의")
-    torso_kw    = st.selectbox("torso", keywords("torso"), label_visibility="collapsed")
+    torso_kw    = st.selectbox("torso", keywords("torso"), format_func=ko,
+                               label_visibility="collapsed")
     section_label(4, "하의")
-    legs_kw     = st.selectbox("legs", keywords("legs"), label_visibility="collapsed")
+    legs_kw     = st.selectbox("legs", keywords("legs"), format_func=ko,
+                               label_visibility="collapsed")
     section_label(5, "발")
-    feet_kw     = st.selectbox("feet", keywords("feet"), label_visibility="collapsed")
+    feet_kw     = st.selectbox("feet", keywords("feet"), format_func=ko,
+                               label_visibility="collapsed")
 
     st.markdown('<div class="gold-rule"></div>', unsafe_allow_html=True)
     generate_btn = st.button("⚔  생성", use_container_width=True)
@@ -338,8 +373,8 @@ if generate_btn:
     }
     st.session_state["sprites"] = sprites
     st.session_state["choice"]  = {
-        "몸 · 동작": body_action, "헤어": hair_kw, "상의": torso_kw,
-        "하의": legs_kw, "발": feet_kw,
+        "몸 · 동작": ko(body_action), "헤어": ko(hair_kw), "상의": ko(torso_kw),
+        "하의": ko(legs_kw), "발": ko(feet_kw),
     }
 
 if "sprites" not in st.session_state:
