@@ -399,11 +399,12 @@ with st.sidebar:
     # 잠금은 최초 1회 생성 이후부터 활성화
     lock_enabled = "sprites" in st.session_state
 
-    body_action, lock_body  = layer_row(1, "몸 · 동작", "body",  BODY_ACTIONS, lock_enabled)
-    hair_kw,     lock_hair  = layer_row(2, "헤어",      "hair",  keywords("hair"), lock_enabled)
-    torso_kw,    lock_torso = layer_row(3, "상의",      "torso", keywords("torso"), lock_enabled)
-    legs_kw,     lock_legs  = layer_row(4, "하의",      "legs",  keywords("legs"), lock_enabled)
-    feet_kw,     lock_feet  = layer_row(5, "발",        "feet",  keywords("feet"), lock_enabled)
+    body_action = "idle"
+    lock_body   = False
+    hair_kw,     lock_hair  = layer_row(1, "헤어",      "hair",  keywords("hair"), lock_enabled)
+    torso_kw,    lock_torso = layer_row(2, "상의",      "torso", keywords("torso"), lock_enabled)
+    legs_kw,     lock_legs  = layer_row(3, "하의",      "legs",  keywords("legs"), lock_enabled)
+    feet_kw,     lock_feet  = layer_row(4, "발",        "feet",  keywords("feet"), lock_enabled)
 
     if not lock_enabled:
         st.caption("🔒 잠금은 첫 생성 이후 사용할 수 있습니다.")
