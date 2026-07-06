@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 기반 2D 캐릭터 스프라이트 생성 모델 — 수행내역서</title>
+<style>
+  :root {
+    --bg: #0e1116;
+    --surface: #161b22;
+    --surface-2: #1c232d;
+    --line: #2a323d;
+    --text: #e8edf3;
+    --muted: #8b97a6;
+    --accent: #ff7a59;
+    --accent-2: #4fd1c5;
+    --accent-3: #a78bfa;
+    --grid: rgba(255,255,255,0.035);
+
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+                 "Pretendard", "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .slide {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 7vh 8vw;
+    position: relative;
+    border-bottom: 1px solid var(--line);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .kicker::before { content: ""; width: 28px; height: 2px; background: var(--accent); display: inline-block; }
+
+  h1 { font-size: clamp(2.4rem, 1.2rem + 4vw, 5rem); line-height: 1.02; font-weight: 800; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(1.7rem, 1rem + 2.4vw, 3rem); line-height: 1.08; font-weight: 750; letter-spacing: -0.015em; margin-bottom: 1.8rem; }
+  h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; }
+
+  p { color: var(--muted); font-size: clamp(0.95rem, 0.85rem + 0.3vw, 1.1rem); line-height: 1.6; }
+  strong { color: var(--text); font-weight: 650; }
+  .hl { color: var(--accent); font-weight: 650; }
+  .hl2 { color: var(--accent-2); font-weight: 650; }
+  .hl3 { color: var(--accent-3); font-weight: 650; }
+
+  .pageno { position: absolute; bottom: 3.5vh; right: 8vw; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+  .footer-label { position: absolute; bottom: 3.5vh; left: 8vw; font-family: var(--font-mono); font-size: 0.72rem; color: var(--line); letter-spacing: 0.1em; }
+
+  .title-slide { justify-content: center; }
+  .title-slide .doc-type { font-family: var(--font-mono); color: var(--muted); letter-spacing: 0.3em; font-size: 0.85rem; margin-bottom: 2rem; }
+  .title-slide h1 .accent { color: var(--accent); }
+  .meta-card { margin-top: 3rem; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(180deg, var(--surface), var(--bg)); max-width: 560px; overflow: hidden; }
+  .meta-row { display: flex; border-bottom: 1px solid var(--line); }
+  .meta-row:last-child { border-bottom: none; }
+  .meta-row .k { width: 130px; padding: 1rem 1.4rem; background: var(--surface-2); font-weight: 650; font-size: 0.95rem; border-right: 1px solid var(--line); }
+  .meta-row .v { padding: 1rem 1.4rem; color: var(--text); font-size: 0.95rem; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+  @media (max-width: 880px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  .card { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 1.5rem 1.6rem; }
+  .card h3 { color: var(--text); }
+  .card.accent-l { border-left: 3px solid var(--accent); }
+  .card.accent2-l { border-left: 3px solid var(--accent-2); }
+  .card.accent3-l { border-left: 3px solid var(--accent-3); }
+
+  ul.clean { list-style: none; }
+  ul.clean li { color: var(--muted); line-height: 1.55; padding-left: 1.4rem; position: relative; margin-bottom: 0.7rem; font-size: 1rem; }
+  ul.clean li::before { content: "▸"; color: var(--accent); position: absolute; left: 0; top: 0; }
+
+  figure.fig { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+  figure.fig img { width: 100%; display: block; background: #ffffff; }
+  figure.fig figcaption { padding: 0.65rem 1rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); border-top: 1px solid var(--line); letter-spacing: 0.03em; }
+  figure.fig figcaption .tag { color: var(--accent); }
+
+  /* placeholder (사용자가 직접 이미지 삽입) */
+  .ph-box { display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 320px; border: 2px dashed var(--line); border-radius: 8px; margin: 0.08rem;
+            color: var(--muted); text-align: center; gap: 0.5rem; background: rgba(255,255,255,0.015); }
+  .ph-box .big { font-size: 1.1rem; font-weight: 650; color: var(--text); letter-spacing: 0.04em; }
+  .ph-box .sub { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .ph-box .ico { font-size: 2rem; color: var(--line); }
+
+  .toc-list { display: grid; gap: 1rem; max-width: 760px; }
+  .toc-item { display: flex; align-items: baseline; gap: 1.4rem; padding: 1rem 1.4rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); text-decoration: none; cursor: pointer; transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease; }
+  a.toc-item:hover { border-color: var(--accent); background: var(--surface-2); transform: translateX(6px); }
+  a.toc-item:hover .t { color: var(--accent); }
+  .toc-item .num { font-family: var(--font-mono); color: var(--accent); font-size: 1.3rem; font-weight: 700; width: 40px; }
+  .toc-item .t { font-size: 1.2rem; font-weight: 650; color: var(--text); }
+  .toc-item .d { color: var(--muted); font-size: 0.9rem; margin-left: auto; }
+
+  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+  @media (max-width: 880px) { .metric-grid { grid-template-columns: repeat(2,1fr); } }
+  .metric { border: 1px solid var(--line); border-radius: 12px; padding: 1.6rem 1.4rem; background: var(--surface); }
+  .metric .v { font-size: clamp(1.8rem, 1rem + 2vw, 2.8rem); font-weight: 800; letter-spacing: -0.02em; }
+  .metric .v.c1 { color: var(--accent); }
+  .metric .v.c2 { color: var(--accent-2); }
+  .metric .v.c3 { color: var(--accent-3); }
+  .metric .l { color: var(--muted); font-size: 0.85rem; margin-top: 0.4rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th, td { padding: 0.72rem 1rem; text-align: left; border-bottom: 1px solid var(--line); }
+  th { color: var(--accent); font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+  td { color: var(--muted); }
+  td strong { color: var(--text); }
+  tr.best td { background: rgba(255,122,89,0.08); }
+  tr.best td strong { color: var(--accent); }
+
+  .pipeline { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; margin-top: 1rem; }
+  .stage { flex: 1; min-width: 130px; border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1rem; background: var(--surface); text-align: center; position: relative; }
+  .stage + .stage { margin-left: 26px; }
+  .stage + .stage::before { content: "→"; position: absolute; left: -22px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 1.2rem; }
+  .stage .s-t { font-weight: 700; color: var(--text); font-size: 0.98rem; }
+  .stage .s-d { color: var(--muted); font-size: 0.78rem; margin-top: 0.35rem; }
+  .stage.final { border-color: var(--accent); background: rgba(255,122,89,0.07); }
+
+  .evo { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-top: 1rem; }
+  @media (max-width: 880px) { .evo { grid-template-columns: 1fr 1fr; } }
+  .evo-step { border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem 1rem; background: var(--surface); position: relative; }
+  .evo-step .e-n { font-family: var(--font-mono); color: var(--muted); font-size: 0.75rem; }
+  .evo-step .e-t { font-weight: 700; color: var(--text); margin: 0.4rem 0; font-size: 1rem; }
+  .evo-step .e-d { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
+  .evo-step.final { border-color: var(--accent-2); background: rgba(79,209,197,0.06); }
+  .evo-step.final .e-t { color: var(--accent-2); }
+
+  pre { background: #0a0d12; border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem 1.4rem; overflow-x: auto; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; color: #cdd6e0; }
+  pre .cm { color: var(--muted); }
+  pre .ad { color: var(--accent-2); }
+  pre .rm { color: var(--accent); }
+
+  .arch-flow { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.82rem; }
+  .arch-box { border: 1px solid var(--line); border-radius: 8px; padding: 0.7rem 1rem; background: var(--surface); color: var(--text); }
+  .arch-box.z { border-color: var(--accent-3); color: var(--accent-3); }
+  .arch-arrow { color: var(--accent); }
+
+  .note { font-size: 0.82rem; color: var(--muted); margin-top: 1rem; font-style: italic; }
+
+  html { scroll-behavior: smooth; }
+
+  @media print {
+    html { scroll-behavior: auto; }
+    .slide { min-height: 100vh; page-break-after: always; break-after: page; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 1. TITLE -->
+  <section class="slide title-slide">
+    <div class="doc-type">2026년 AI개발 수행내역서</div>
+    <h1>AI 기반 2D 캐릭터<br><span class="accent">스프라이트 생성</span> 모델 개발</h1>
+    <p style="max-width:620px;margin-top:1.6rem;font-size:1.15rem;">
+      조건부 변분 오토인코더(CVAE)와 레이어 합성 기반<br>픽셀 스프라이트 자동 생성 및 시각화
+    </p>
+    <div class="meta-card">
+      <div class="meta-row"><div class="k">과제명</div><div class="v">AI 기반 캐릭터 스프라이트 생성모델 개발 및 시각화</div></div>
+      <div class="meta-row"><div class="k">담당자</div><div class="v">고무서</div></div>
+      <div class="meta-row"><div class="k">작성일</div><div class="v">2026년 6월 29일</div></div>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">01</div>
+  </section>
+
+  <!-- 2. TOC -->
+  <section class="slide">
+    <div class="kicker">Contents</div>
+    <h2>목차</h2>
+    <div class="toc-list">
+      <a class="toc-item" href="#ch1"><span class="num">01</span><span class="t">프로젝트 개요</span><span class="d">추진배경 · 목적 · 과제범위</span></a>
+      <a class="toc-item" href="#ch2"><span class="num">02</span><span class="t">데이터 분석 및 전처리</span><span class="d">수집 · 재분류 · 증강</span></a>
+      <a class="toc-item" href="#ch3"><span class="num">03</span><span class="t">모델 학습 및 최적화</span><span class="d">VAE → CVAE → Perceptual Loss</span></a>
+      <a class="toc-item" href="#ch4"><span class="num">04</span><span class="t">결과 시각화 및 평가</span><span class="d">잠재공간 분석 · 레이어 합성</span></a>
+      <a class="toc-item" href="#ch5"><span class="num">05</span><span class="t">결론 및 향후 계획</span><span class="d">성과 요약 · 한계 · 개선방향</span></a>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">02</div>
+  </section>
+
+  <!-- 3. 개요 - 배경/목적 -->
+  <section class="slide" id="ch1">
+    <div class="kicker">01 · 프로젝트 개요</div>
+    <h2>추진 배경 및 목적</h2>
+    <div class="two-col">
+      <div>
+        <ul class="clean">
+          <li>게임·콘텐츠 제작에서 캐릭터 스프라이트는 <strong>방향·동작·의상별로 수백 프레임</strong>을 수작업으로 그려야 해 제작 비용이 크다.</li>
+          <li>키워드 조합만으로 일관된 스타일의 스프라이트를 <strong>자동 생성</strong>할 수 있다면 프로토타이핑·에셋 초안 단계를 효율화할 수 있다.</li>
+          <li>본 과제는 공개 픽셀 스프라이트(LPC)를 학습한 <span class="hl">조건부 생성 모델(CVAE)</span>을 구축하고, 레이어 합성으로 조합형 캐릭터를 생성하는 것을 목표로 한다.</li>
+        </ul>
+      </div>
+      <div class="card accent-l">
+        <h3>핵심 목표</h3>
+        <p>키워드(동작·의상·헤어) 입력 → 64×64 RGBA 스프라이트 5개 레이어를 각각 생성 → alpha composite로 합성한 완성 캐릭터를 실시간 제공하는 <strong>Streamlit 데모 앱</strong> 구현</p>
+      </div>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">03</div>
+  </section>
+
+  <!-- 4. 개요 - 범위/추진방법 -->
+  <section class="slide">
+    <div class="kicker">01 · 프로젝트 개요</div>
+    <h2>과제 범위 및 추진 프로세스</h2>
+    <div class="two-col" style="grid-template-columns: 1fr 1fr; margin-bottom:2rem;">
+      <div class="card">
+        <h3>과제 범위</h3>
+        <ul class="clean" style="margin-top:0.6rem;">
+          <li>LPC 공개 스프라이트 수집 · 64×64 RGBA 표준화</li>
+          <li>카테고리 재분류 · 데이터 증강 · 키워드 분리</li>
+          <li>VAE → β-VAE → CVAE → CVAE+Perceptual Loss 단계적 모델링</li>
+          <li>잠재공간 시각화 · latent arithmetic 분석</li>
+          <li>레이어 CVAE(86 클래스) 학습 및 합성 앱 구현</li>
+        </ul>
+      </div>
+      <div class="card accent2-l">
+        <h3>구축 방법론</h3>
+        <p style="margin-bottom:0.8rem;"><span class="hl2">TensorFlow ↔ PyTorch 이중 구현</span>으로 동일 아키텍처를 교차 검증.</p>
+        <p>Apple Silicon(Metal/MPS) 환경에서 학습. 각 단계별 결과를 노트북 01~10으로 모듈화하여 재현성 확보.</p>
+      </div>
+    </div>
+    <div class="pipeline">
+      <div class="stage"><div class="s-t">데이터 수집</div><div class="s-d">LPC 스프라이트</div></div>
+      <div class="stage"><div class="s-t">전처리</div><div class="s-d">64×64 · 재분류 · 증강</div></div>
+      <div class="stage"><div class="s-t">모델링</div><div class="s-d">VAE→CVAE→PL</div></div>
+      <div class="stage"><div class="s-t">생성</div><div class="s-d">조건부 z 샘플링</div></div>
+      <div class="stage final"><div class="s-t">레이어 합성</div><div class="s-d">완성 캐릭터</div></div>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">04</div>
+  </section>
+
+  <!-- 5. 데이터 수집/개요 -->
+  <section class="slide" id="ch2">
+    <div class="kicker">02 · 데이터 분석 및 전처리</div>
+    <h2>데이터 수집 및 개요</h2>
+    <div class="metric-grid" style="margin-bottom:2rem;">
+      <div class="metric"><div class="v c1">~285만</div><div class="l">총 프레임 수</div></div>
+      <div class="metric"><div class="v c2">26</div><div class="l">카테고리</div></div>
+      <div class="metric"><div class="v c3">64×64</div><div class="l">RGBA 해상도</div></div>
+      <div class="metric"><div class="v">86</div><div class="l">레이어 클래스</div></div>
+    </div>
+    <div class="two-col" style="grid-template-columns: 1.1fr 1fr;">
+      <figure class="fig">
+        <img src="images/01_dataset_analysis__figure_01.png" alt="카테고리별 PNG 파일 분포" />
+        <figcaption><span class="tag">그림 1</span> · 원본 데이터셋 카테고리별 분포 (01_dataset_analysis)</figcaption>
+      </figure>
+      <div>
+        <p style="margin-bottom:1rem;"><strong>출처</strong> · Liberated Pixel Cup(LPC) 공개 픽셀 스프라이트셋. 모든 프레임이 동일한 64×64 RGBA 규격으로 설계되어 레이어 합성에 적합.</p>
+        <p><strong>구조</strong> · body / torso / legs / feet / hair / hat / wings / tail 등 26개 카테고리. 각 카테고리는 키워드 서브폴더로 세분화하여 fine-grained 레이블을 부여.</p>
+      </div>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">05</div>
+  </section>
+
+  <!-- 6. 전처리 -->
+  <section class="slide">
+    <div class="kicker">02 · 데이터 분석 및 전처리</div>
+    <h2>전처리 및 데이터 품질 처리</h2>
+    <div class="three-col" style="margin-bottom:1.6rem;">
+      <div class="card accent-l">
+        <h3>카테고리 재분류</h3>
+        <p style="font-size:0.9rem;">body에 혼재된 항목 분리: wings(100,264)·tail(93,590)·wound(2,528), zombie/skeleton(356) 삭제 → 순수 body <strong>2,272장</strong></p>
+      </div>
+      <div class="card accent2-l">
+        <h3>데이터 증강</h3>
+        <p style="font-size:0.9rem;">body 좌우반전(FLIP_LEFT_RIGHT)으로 2배 확장 → <strong>4,544장</strong>. macOS spawn 충돌 회피 위해 ThreadPoolExecutor 사용.</p>
+      </div>
+      <div class="card accent3-l">
+        <h3>키워드 서브폴더 분리</h3>
+        <p style="font-size:0.9rem;">파일명 첫 토큰 기준 분리로 레이블 노이즈 제거. fine-grained 조건 부여 → <strong>86 클래스</strong> 확보.</p>
+      </div>
+    </div>
+    <figure class="fig">
+      <img src="images/03-1_augment_body__figure_01.png" alt="body 좌우반전 증강 미리보기" />
+      <figcaption><span class="tag">그림 2</span> · 좌우반전 증강 결과 — 상단 원본 / 하단 반전 (03-1_augment_body)</figcaption>
+    </figure>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">06</div>
+  </section>
+
+  <!-- 7. 모델 아키텍처 -->
+  <section class="slide" id="ch3">
+    <div class="kicker">03 · 모델 학습 및 최적화</div>
+    <h2>VAE 아키텍처</h2>
+    <div class="arch-flow" style="margin-bottom:1rem;">
+      <span class="arch-box">입력 64×64×4</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-box">Encoder · Conv×4 (64→4)</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-box z">z = μ + ε·σ (128d)</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-box">Decoder · ConvT×4 (4→64)</span>
+      <span class="arch-arrow">→</span>
+      <span class="arch-box">복원 64×64×4</span>
+    </div>
+    <div class="two-col" style="grid-template-columns: 1fr 1.1fr;">
+      <div>
+        <div class="card accent2-l" style="margin-bottom:0.8rem; padding:1.1rem 1.3rem;">
+          <h3>모델 선택 근거 — 왜 VAE인가</h3>
+          <p style="margin-bottom:0.5rem; font-size:0.9rem;"><span class="hl2">구조화된 잠재공간</span> · VAE는 연속적·정규화된 잠재공간 z를 학습해, 본 과제의 핵심인 <strong>잠재공간 보간·latent arithmetic·속성 제어</strong>가 가능하다. (인코더가 없는 순수 GAN은 이러한 잠재 조작이 어렵다.)</p>
+          <p style="font-size:0.9rem;"><span class="hl2">레이블 조건부 생성</span> · VAE는 인코더·디코더에 레이블을 주입하는 <strong>CVAE로 자연스럽게 확장</strong>되어, 동작·의상 등 키워드 조건부 스프라이트 생성과 레이어 합성을 일관된 구조로 구현할 수 있다.</p>
+        </div>
+        <div class="card" style="padding:1.1rem 1.3rem;">
+          <h3>손실 함수</h3>
+          <ul class="clean" style="margin-top:0.4rem;">
+            <li style="font-size:0.9rem; margin-bottom:0.5rem;"><strong>L</strong> · 전체 손실 = <span class="hl">Recon + β × KL</span></li>
+            <li style="font-size:0.9rem; margin-bottom:0.5rem;"><strong>Recon</strong> · 재구성 손실 — 입력과 복원 이미지의 픽셀 차이. 작을수록 원본을 잘 복원한다.</li>
+            <li style="font-size:0.9rem; margin-bottom:0;"><strong>KL</strong> · KL 발산 — 잠재분포를 prior N(0,I)에 맞추는 정규화 항. 잠재공간을 매끄럽게 유지한다.</li>
+          </ul>
+        </div>
+      </div>
+      <figure class="fig">
+        <img src="images/04-1_vae_model_pytorch__figure_01.png" alt="VAE 랜덤 생성 샘플" />
+        <figcaption><span class="tag">그림 3</span> · VAE 랜덤 생성 샘플 32개 — z ~ N(0,I) (04-1_vae_model_pytorch)</figcaption>
+      </figure>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">07</div>
+  </section>
+
+  <!-- 8. 모델 발전 + beta -->
+  <section class="slide">
+    <div class="kicker">03 · 모델 학습 및 최적화</div>
+    <h2>모델 발전 단계 및 β-VAE 실험</h2>
+    <div class="evo" style="margin-bottom:1rem;">
+      <div class="evo-step"><div class="e-n">STEP 1</div><div class="e-t">VAE</div><div class="e-d">기본 재구성 (TF + PyTorch)</div></div>
+      <div class="evo-step"><div class="e-n">STEP 2</div><div class="e-t">β-VAE</div><div class="e-d">β=0.5~4.0 → β=1.0 선택</div></div>
+      <div class="evo-step"><div class="e-n">STEP 3</div><div class="e-t">CVAE</div><div class="e-d">레이블 주입 조건부 생성</div></div>
+      <div class="evo-step final"><div class="e-n">STEP 4</div><div class="e-t">CVAE + PL</div><div class="e-d">Perceptual Loss ★ body</div></div>
+      <div class="evo-step final"><div class="e-n">STEP 5</div><div class="e-t">Layer CVAE</div><div class="e-d">86 클래스 ★ 레이어</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.5rem;margin:-0.6rem 0 0.9rem;font-family:var(--font-mono);font-size:0.78rem;color:var(--muted);">
+      <span style="display:inline-block;width:14px;height:14px;border:1px solid var(--accent-2);background:rgba(79,209,197,0.06);border-radius:3px;"></span>
+      <span><span class="hl2">★ 최종 배포 모델</span> — Streamlit 앱에 적용 (body: CVAE+PL · 레이어: Layer CVAE)</span>
+    </div>
+    <div style="display:grid; grid-template-columns: 1.05fr 0.62fr 1.05fr; gap:1.3rem; align-items:start;">
+      <figure class="fig">
+        <img src="images/05_beta_vae_experiment__figure_01.png" alt="β-VAE 학습 곡선 비교" />
+        <figcaption><span class="tag">그림 4-1</span> · β별 Val Reconstruction / KL Loss (05)</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/05_beta_vae_experiment__figure_02.png" alt="β별 재구성 품질" />
+        <figcaption><span class="tag">그림 4-2</span> · β별 재구성 품질 (열: β=0.5/1/2/4)</figcaption>
+      </figure>
+      <div>
+        <div class="card accent3-l" style="margin-bottom:0.7rem; padding:1rem 1.2rem;">
+          <h3>β란?</h3>
+          <p style="font-size:0.85rem;">손실 <code>L = Recon + β×KL</code>에서 <strong>KL 항의 가중치</strong>. <span class="hl3">β↑</span> 이면 정규화·disentanglement가 강해지지만 재구성 품질은 저하. <span class="hl3">β=1.0</span>은 표준 VAE.</p>
+        </div>
+        <div class="card accent-l" style="padding:1rem 1.2rem;">
+          <h3>β-VAE 실험 결론</h3>
+          <p style="font-size:0.85rem;">body는 동질성 높은 인체 형태 위주 → β를 높일수록 KL이 잠재공간을 과도하게 압축해 디테일이 뭉개짐(β=4.0). <span class="hl">β=1.0(표준 VAE)</span>이 최적 복원 품질로 최종 선택.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">08</div>
+  </section>
+
+  <!-- 9. Posterior Collapse -->
+  <section class="slide">
+    <div class="kicker">03 · 핵심 문제 해결</div>
+    <h2>Posterior Collapse 진단 및 해결</h2>
+    <div class="two-col">
+      <div>
+        <p style="margin-bottom:1rem;"><strong>현상</strong> · 어떤 입력을 넣어도 동일한 "평균 이미지" 출력. 인코더가 입력을 무시(kl≈0.001, σ≈1.0).</p>
+        <p><strong>원인</strong> · MSE는 16,384개 픽셀 평균, KL은 256개 원소 평균 → Recon이 KL보다 <span class="hl">~64배</span> 크게 정규화되어 KL이 학습에 기여하지 못함.</p>
+        <pre style="margin-top:1.2rem;"><span class="rm">- recon = mse_loss(x̂, x, reduction='mean')</span>
+<span class="rm">- kl    = -0.5 * mean(...)</span>
+<span class="ad">+ recon = mse_loss(x̂, x, reduction='sum')/B</span>
+<span class="ad">+ kl    = -0.5 * sum(...)/B</span></pre>
+      </div>
+      <div>
+        <table>
+          <thead><tr><th>지표</th><th>수정 전</th><th>수정 후</th></tr></thead>
+          <tbody>
+            <tr><td>kl_loss</td><td>~0.001</td><td><strong>35~39</strong></td></tr>
+            <tr><td>μ 절댓값 평균</td><td>~0.02</td><td><strong>0.30~0.37</strong></td></tr>
+            <tr><td>σ 평균</td><td>~1.000</td><td><strong>0.87~0.96</strong></td></tr>
+          </tbody>
+        </table>
+        <div class="card accent2-l" style="margin-top:1.4rem;">
+          <h3>TF ↔ PyTorch 결과 통일</h3>
+          <p style="font-size:0.9rem;">BatchNorm momentum(0.99 vs 0.1) 차이로 running stats 갱신 10배 차 → <strong>momentum=0.9로 통일</strong>. 가중치 초기화·padding·LR 단위 차이도 분석·정리.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">09</div>
+  </section>
+
+  <!-- 10. CVAE 조건부 생성 + 정량 평가 -->
+  <section class="slide">
+    <div class="kicker">03 · 모델 학습 및 최적화</div>
+    <h2>CVAE 조건부 생성 및 정량 평가</h2>
+    <div class="two-col" style="grid-template-columns: 1.1fr 1fr;">
+      <figure class="fig">
+        <img src="images/08-1_cvae_pytorch__figure_02.png" alt="CVAE 재구성 결과" />
+        <figcaption><span class="tag">그림 5-1</span> · CVAE 재구성 — 상단 원본 / 하단 복원 (08-1_cvae_pytorch)</figcaption>
+      </figure>
+      <div>
+        <h3 style="margin-bottom:0.6rem;">학습 결과 (100 epoch)</h3>
+        <table>
+          <thead><tr><th>구현</th><th>val_loss</th><th>recon</th><th>KL</th></tr></thead>
+          <tbody>
+            <tr><td><strong>TensorFlow</strong> (β=1.0)</td><td><strong>59.47</strong></td><td>33.05</td><td>21.79</td></tr>
+            <tr><td><strong>PyTorch</strong> (β=1.5)</td><td><strong>61.54</strong></td><td>33.40</td><td>23.49</td></tr>
+          </tbody>
+        </table>
+        <div class="card accent3-l" style="margin-top:1.2rem;">
+          <h3>조건부 생성 한계 및 대응</h3>
+          <p style="font-size:0.9rem;"><span class="hl3">잠재공간 구멍(hole)</span> · N(0,I) 순수 샘플링 시 일부 z가 학습분포 밖에 착지해 뭉개짐 → PyTorch <strong>β=1.5</strong>로 KL 정규화 강화해 해소.</p>
+          <p style="font-size:0.9rem;margin-top:0.6rem;"><span class="hl3">레이블 반응 미미</span> · 정보 대부분이 z에 담겨 레이블 간 포즈 차이가 작음 → 레이블 임베딩 강화·KL 조정 필요.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">10</div>
+  </section>
+
+  <!-- 11. CVAE + Perceptual Loss -->
+  <section class="slide">
+    <div class="kicker">03 · 모델 학습 및 최적화</div>
+    <h2>CVAE + Perceptual Loss 파인튜닝</h2>
+    <p style="font-size:0.9rem; margin-bottom:1rem;"><strong>Perceptual Loss란?</strong> 픽셀 단위 차이(MSE) 대신 사전학습된 <span class="hl">VGG16</span>의 중간 feature 차이를 비교하는 손실로, 사람이 지각하는 질감·윤곽을 살려 <span class="hl">더 또렷하고 자연스러운 복원</span>을 유도한다.</p>
+    <div class="two-col" style="grid-template-columns: 1fr 1.15fr; margin-bottom:0.6rem;">
+      <div>
+        <ul class="clean">
+          <li style="font-size:0.86rem;margin-bottom:0.5rem;">기존 CVAE 가중치를 불러와 <strong>VGG16 perceptual loss</strong>를 추가해 50 에폭 파인튜닝(lr 1e-4).</li>
+          <li style="font-size:0.86rem;margin-bottom:0.5rem;">64×64에 적합한 <span class="hl">relu1_2 · relu2_2</span> 얕은 레이어 피처 사용. RGBA→RGB는 흰 배경 합성.</li>
+          <li style="font-size:0.86rem;margin-bottom:0;">전처리 스케일 통일(<span class="hl2">to_vgg_scaled</span>, [0,255] BGR)로 perceptual loss가 실효적으로 작동.</li>
+        </ul>
+        <div class="card accent-l" style="margin-top:0.8rem; padding:0.9rem 1.2rem;">
+          <p style="font-size:0.86rem;"><strong>최종 모델</strong> · <span class="hl">PyTorch β=1.5 + Perceptual Loss (λ=1.0)</span> — 조건부 생성 안정성·복원 품질 모두 우수. <code>checkpoints_cvae_pl_pt/</code></p>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:0.5rem;">lambda 튜닝 실험</h3>
+        <table style="font-size:0.86rem;">
+          <thead><tr><th>lambda</th><th>전처리</th><th>결과</th></tr></thead>
+          <tbody>
+            <tr><td>0.05</td><td>to_vgg [0,1]</td><td>MSE 대비 0.6% — 시각 차이 없음</td></tr>
+            <tr><td>0.5</td><td>to_vgg [0,1]</td><td>MSE 대비 6% — 시각 차이 없음</td></tr>
+            <tr class="best"><td><strong>1.0</strong></td><td><strong>to_vgg_scaled</strong></td><td><strong>TF 0.05와 동등 — 최종 적용</strong></td></tr>
+          </tbody>
+        </table>
+        <p class="note" style="margin-top:0.6rem;">to_vgg([0,1])는 perceptual 값이 MSE 대비 미미(~4)해 무효. to_vgg_scaled([0,255] BGR, TF 방식)로 스케일을 통일해야 강하게 작동(~수만).</p>
+      </div>
+    </div>
+    <figure class="fig" style="max-width:47%; margin:0 auto;">
+      <img src="images/09-1_cvae_perceptual_pytorch__reconstruction_comparison.png" alt="Base CVAE vs Perceptual CVAE 재구성 비교" />
+      <figcaption><span class="tag">그림 5-2</span> · Base CVAE vs Perceptual CVAE 재구성 — 상단 원본 / 중단 Base / 하단 Perceptual (09-1)</figcaption>
+    </figure>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">11</div>
+  </section>
+
+  <!-- 12. 잠재공간 시각화 (VAE vs CVAE) -->
+  <section class="slide" id="ch4">
+    <div class="kicker">04 · 결과 시각화 및 평가</div>
+    <h2>잠재공간 시각화 — VAE vs CVAE</h2>
+    <div class="two-col" style="margin-bottom:1.2rem;">
+      <figure class="fig">
+        <img src="images/07_latent_visualization__figure_01.png" alt="VAE 잠재공간 PCA" />
+        <figcaption><span class="tag">그림 6</span> · VAE 잠재공간 PCA — 클러스터 미분리 (07)</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/07-1_latent_visualization_cvae__figure_01.png" alt="CVAE 잠재공간 PCA" />
+        <figcaption><span class="tag">그림 7</span> · CVAE 잠재공간 PCA — VAE와 동일하게 미분리 (07-1)</figcaption>
+      </figure>
+    </div>
+    <div class="two-col" style="grid-template-columns: 1fr 1fr;">
+      <p>PCA·t-SNE·UMAP 모두 캐릭터/액션 라벨로 색칠해도 <strong>뚜렷한 분리가 없음</strong> — 레이블 없이 비지도로 학습해 의미 속성이 자동 정렬된다는 보장이 없기 때문.</p>
+      <p>CVAE는 z가 "레이블로 설명 안 되는 나머지 정보"만 담아 std가 전반적으로 더 낮음(전체 <span class="hl2">0.32 &lt; VAE 0.36</span>).</p>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">12</div>
+  </section>
+
+  <!-- 13. Latent Space Arithmetic ① -->
+  <section class="slide">
+    <div class="kicker">04 · 결과 시각화 및 평가</div>
+    <h2>Latent Space Arithmetic — 기본 산술 · 속성 이식</h2>
+    <div class="two-col" style="margin-bottom:1.6rem;">
+      <figure class="fig">
+        <img src="images/06-1_latent_arithmetic_pytorch__figure_01.png" alt="기본 잠재 산술 A-B+C" />
+        <figcaption><span class="tag">그림 8</span> · 기본 산술 z(A) − z(B) + z(C) (06-1)</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/06-1_latent_arithmetic_pytorch__figure_03.png" alt="속성 이식 α sweep" />
+        <figcaption><span class="tag">그림 9</span> · 속성 이식 z + α×방향벡터 (α = −2 ~ +2) (06-1)</figcaption>
+      </figure>
+    </div>
+    <ul class="clean">
+      <li><strong>방향 벡터 추출</strong> · 파일명 키워드로 두 그룹을 나눠 <code>mean(z_A) − mean(z_B)</code>로 속성 방향을 구함.</li>
+      <li><strong>속성 이식</strong> · <code>z + α×방향벡터</code>로 α 부호에 따라 속성이 전이. <span class="hl">α가 과대(±2)하면 잠재공간 유효범위를 벗어나 디코더 출력이 뭉개짐</span> → 0.5~1.0부터 점진 증가가 적절.</li>
+    </ul>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">13</div>
+  </section>
+
+  <!-- 14. 레이어 CVAE 결과 -->
+  <section class="slide">
+    <div class="kicker">04 · 결과 시각화 및 평가</div>
+    <h2>레이어 CVAE 학습 및 생성 결과</h2>
+    <figure class="fig" style="margin:0 auto 0.6rem; max-width:78%;">
+      <img src="images/10_cvae_layer_pytorch__figure_04_conditional_generation.png" alt="86 클래스 레이어 조건부 생성" />
+      <figcaption><span class="tag">그림 10</span> · 동일 z, 키워드 레이블별 조건부 생성 (torso/legs/feet/hair) — 10_cvae_layer_pytorch</figcaption>
+    </figure>
+    <div class="two-col" style="grid-template-columns: 1fr 1fr; max-width:78%; margin:0 auto;">
+      <figure class="fig">
+        <img src="images/10_cvae_layer_pytorch__figure_03_reconstruction.png" alt="레이어 복원 결과" />
+        <figcaption><span class="tag">그림 11</span> · 레이어별 복원 — 상단 원본 / 하단 복원 (10)</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/10_cvae_layer_pytorch__figure_02_training_curves.png" alt="레이어 CVAE 학습 곡선" />
+        <figcaption><span class="tag">그림 12</span> · 레이어 CVAE 학습 곡선 — Total / Recon·KL (10)</figcaption>
+      </figure>
+    </div>
+    <div class="two-col" style="grid-template-columns: 0.9fr 1.1fr; margin-top:0.4rem; align-items:center;">
+      <table>
+        <thead><tr><th>지표 (최종 epoch)</th><th>값</th></tr></thead>
+        <tbody>
+          <tr class="best"><td><strong>Total Loss · train</strong></td><td><strong>37.30</strong></td></tr>
+          <tr><td>Total Loss · val</td><td>39.35</td></tr>
+          <tr><td>Reconstruction (train)</td><td>21.40</td></tr>
+          <tr><td>KL Divergence (train)</td><td>10.60</td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin:0;"><span class="hl">L = Recon + β·KL = 21.40 + 1.5×10.60 ≈ 37.30</span> (β=1.5 확인). 검증은 total loss만 기록(recon·KL 분해 미기록). 86 클래스(torso 7 + legs 12 + feet 8 + hair 59) 단일 CVAE · 100 epoch · max_per_class=2000.</p>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">14</div>
+  </section>
+
+  <!-- 15. 최종 합성 캐릭터 (placeholder) -->
+  <section class="slide">
+    <div class="kicker">04 · 결과 시각화 및 평가</div>
+    <h2>최종 결과 — 레이어 합성 캐릭터</h2>
+    <div class="two-col" style="grid-template-columns: 1.3fr 1fr;">
+      <figure class="fig">
+        <div style="display:flex;gap:0.8rem;padding:1rem;justify-content:center;align-items:center;background:#ffffff;">
+          <img src="images/results__character.png" alt="합성 캐릭터 1" style="width:30%;image-rendering:pixelated;background:transparent;" />
+          <img src="images/results__character_1_.png" alt="합성 캐릭터 2" style="width:30%;image-rendering:pixelated;background:transparent;" />
+          <img src="images/results__character_3_.png" alt="합성 캐릭터 3" style="width:30%;image-rendering:pixelated;background:transparent;" />
+        </div>
+        <figcaption><span class="tag">그림 13</span> · 최종 합성 캐릭터 3종 (streamlit_sprite.py) — 동일 파이프라인, z 샘플링에 따른 색상·스타일 다양성</figcaption>
+      </figure>
+      <div>
+        <p style="margin-bottom:1rem;">키워드를 조합해 5개 레이어를 각각 CVAE로 <strong>순수 생성</strong>(원본 미사용)한 뒤 alpha composite로 합성.</p>
+        <div class="arch-flow" style="font-size:0.78rem;margin-bottom:1.2rem;">
+          <span class="arch-box">body</span><span class="arch-arrow">→</span>
+          <span class="arch-box">legs</span><span class="arch-arrow">→</span>
+          <span class="arch-box">feet</span><span class="arch-arrow">→</span>
+          <span class="arch-box">torso</span><span class="arch-arrow">→</span>
+          <span class="arch-box">hair</span>
+        </div>
+        <div class="card accent-l">
+          <h3>생성 흐름</h3>
+          <p style="font-size:0.92rem;">각 레이어 CVAE decoder에 z ~ N(0,I) + 레이블 → 64×64 RGBA 생성 → 레이어 순서대로 PIL alpha_composite → 256×256 nearest-neighbor 업스케일 표시. Generate마다 새 z → 같은 키워드도 다른 색상·스타일.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">15</div>
+  </section>
+
+  <!-- 16. 결론 -->
+  <section class="slide" id="ch5">
+    <div class="kicker">05 · 결론 및 향후 계획</div>
+    <h2>결론 및 향후 계획</h2>
+    <div class="two-col">
+      <div class="card accent2-l">
+        <h3>성과 요약</h3>
+        <ul class="clean" style="margin-top:0.6rem;">
+          <li>VAE→CVAE+PL 단계적 개선으로 조건부 스프라이트 생성 달성</li>
+          <li>TF/PyTorch 이중 구현 교차검증 · posterior collapse 해결</li>
+          <li>86 클래스 레이어 CVAE + 합성 앱으로 조합형 캐릭터 생성</li>
+        </ul>
+      </div>
+      <div class="card accent-l">
+        <h3>실무 적용 방안</h3>
+        <p>게임 프로토타이핑·에셋 초안 자동화. 키워드 기반 캐릭터 변형으로 디자인 탐색 단계의 반복 비용 절감.</p>
+      </div>
+    </div>
+    <div class="card accent3-l" style="margin-top:1.6rem;">
+      <h3>한계점 → 개선 방향</h3>
+      <table style="margin-top:0.4rem;">
+        <thead><tr><th>한계점</th><th>개선 방향</th></tr></thead>
+        <tbody>
+          <tr><td>64×64 저해상도</td><td>고해상도 / Diffusion 모델 확장</td></tr>
+          <tr><td>레이블 반응 미미 (정보가 z에 집중)</td><td>레이블 임베딩 강화 · KL 가중치 조정</td></tr>
+          <tr><td>일부 레이어 클래스 데이터 불균형</td><td>데이터 확충 · class-balanced 샘플링</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer-label">LPC SPRITE VAE</div>
+    <div class="pageno">16</div>
+  </section>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var idx = 0;
+
+  function go(i) {
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // 수동 스크롤 시 현재 슬라이드 인덱스 동기화
+  function sync() {
+    var mid = window.scrollY + window.innerHeight / 2;
+    for (var i = 0; i < slides.length; i++) {
+      var top = slides[i].offsetTop;
+      if (mid >= top && mid < top + slides[i].offsetHeight) { idx = i; break; }
+    }
+  }
+  window.addEventListener('scroll', sync, { passive: true });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault(); go(idx + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault(); go(idx - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault(); go(0);
+    } else if (e.key === 'End') {
+      e.preventDefault(); go(slides.length - 1);
+    }
+  });
+})();
+</script>
+</body>
+</html>
