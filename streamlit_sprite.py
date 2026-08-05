@@ -329,8 +329,13 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
   font-family:'Cinzel','Noto Serif KR',serif; color:#ffffff!important;
   letter-spacing:0.10em; font-size:1.0rem; background:transparent;
 }
-.stTabs [aria-selected="true"], .stTabs [aria-selected="true"] *{ color:#ffffff!important; }
-.stTabs [data-baseweb="tab-highlight"]{ background:var(--gold)!important; }
+.stTabs [aria-selected="true"], .stTabs [aria-selected="true"] *{
+  color:#ffffff!important; font-weight:700;
+}
+.stTabs [data-baseweb="tab-highlight"]{
+  background:var(--gold-bright)!important; height:3px!important;
+  box-shadow:0 0 8px rgba(242,217,138,0.55);
+}
 .stTabs [data-baseweb="tab-border"]{ background:transparent; }
 
 /* 실험 figure 캡션 */
