@@ -325,11 +325,11 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
 
 /* 탭 */
 .stTabs [data-baseweb="tab-list"]{ gap:1.4rem; border-bottom:1px solid var(--line); }
-.stTabs [data-baseweb="tab"]{
-  font-family:'Cinzel','Noto Serif KR',serif; color:var(--muted)!important;
+.stTabs [data-baseweb="tab"], .stTabs [data-baseweb="tab"] *{
+  font-family:'Cinzel','Noto Serif KR',serif; color:#ffffff!important;
   letter-spacing:0.10em; font-size:1.0rem; background:transparent;
 }
-.stTabs [aria-selected="true"]{ color:var(--gold-bright)!important; }
+.stTabs [aria-selected="true"], .stTabs [aria-selected="true"] *{ color:#ffffff!important; }
 .stTabs [data-baseweb="tab-highlight"]{ background:var(--gold)!important; }
 .stTabs [data-baseweb="tab-border"]{ background:transparent; }
 
