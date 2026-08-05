@@ -325,14 +325,13 @@ ul[role="listbox"]{ background:#160a0a!important; border:1px solid var(--line)!i
 
 /* 탭 */
 .stTabs [data-baseweb="tab-list"]{ gap:1.4rem; border-bottom:1px solid var(--line); }
-.stTabs [data-baseweb="tab"], .stTabs [data-baseweb="tab"] *{
+/* Streamlit 1.4x부터 탭이 data-baseweb에서 role="tab"/stTab 구조로 바뀜 */
+.stTabs [role="tab"], .stTabs [role="tab"] *{
   font-family:'Cinzel','Noto Serif KR',serif; color:#ffffff!important;
   letter-spacing:0.10em; font-size:1.0rem; background:transparent;
 }
-.stTabs [aria-selected="true"], .stTabs [aria-selected="true"] *{
-  color:#ffffff!important; font-weight:700;
-}
-.stTabs [data-baseweb="tab-highlight"]{
+.stTabs [role="tab"][aria-selected="true"] *{ font-weight:700!important; }
+.stTabs .react-aria-SelectionIndicator{
   background:var(--gold-bright)!important; height:3px!important;
   box-shadow:0 0 8px rgba(242,217,138,0.55);
 }
